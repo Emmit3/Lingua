@@ -1,27 +1,11 @@
+import type { ReelItemData } from '@/types/reel';
+
+export type { ReelItemData } from '@/types/reel';
+
 /**
- * Sample reels for “comprehensible input” style learning:
- * short clips + target language line + optional translation.
- * Replace URIs with your CDN or uploaded assets.
+ * Sample reels: each clip uses `topicLocal` + `hashtags` in the **target language**.
+ * `topic` / `translation` stay English-friendly for tooling; `transcript` is native.
  */
-
-export type ReelItemData = {
-  id: string;
-  /** ISO language tag for the clip */
-  language: string;
-  languageLabel: string;
-  title: string;
-  /** Short hook shown at the top */
-  topic: string;
-  /** What’s being said (target language) */
-  transcript: string;
-  /** Helper line in the learner’s language */
-  translation: string;
-  /** Progressive difficulty 1–3 */
-  level: 1 | 2 | 3;
-  videoUri: string;
-};
-
-/** Free HTTPS samples (replace in production). */
 export const MOCK_REELS: ReelItemData[] = [
   {
     id: '1',
@@ -29,9 +13,16 @@ export const MOCK_REELS: ReelItemData[] = [
     languageLabel: 'Spanish',
     title: 'Café mañanero',
     topic: 'Daily life',
+    topicLocal: 'Vida cotidiana',
     transcript: '¿Te apetece un café con leche o prefieres solo?',
     translation: 'Do you feel like a coffee with milk, or do you prefer it black?',
     level: 1,
+    likeCount: 1240,
+    accentColor: '#f472b6',
+    topicColor: 'rgba(244, 114, 182, 0.45)',
+    hashtags: ['#café', '#mañana', '#aprenderespañol'],
+    authorHandle: 'lingua_es',
+    commentCount: 89,
     videoUri:
       'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
   },
@@ -41,9 +32,16 @@ export const MOCK_REELS: ReelItemData[] = [
     languageLabel: 'Spanish',
     title: 'En el mercado',
     topic: 'Food & shopping',
+    topicLocal: 'Comida y compras',
     transcript: 'Estas fresas están muy dulces, son de temporada.',
     translation: 'These strawberries are very sweet; they’re in season.',
     level: 2,
+    likeCount: 892,
+    accentColor: '#34d399',
+    topicColor: 'rgba(52, 211, 153, 0.4)',
+    hashtags: ['#mercado', '#fresas', '#comida'],
+    authorHandle: 'lingua_es',
+    commentCount: 54,
     videoUri:
       'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
   },
@@ -53,9 +51,15 @@ export const MOCK_REELS: ReelItemData[] = [
     languageLabel: 'Spanish',
     title: 'Metro',
     topic: 'Travel',
+    topicLocal: 'Viajes',
     transcript: 'El próximo tren sale en dos minutos, por favor apartaos del borde.',
     translation: 'The next train leaves in two minutes—please stand back from the edge.',
     level: 2,
+    likeCount: 2103,
+    accentColor: '#60a5fa',
+    hashtags: ['#metro', '#tren', '#ciudad'],
+    authorHandle: 'lingua_es',
+    commentCount: 201,
     videoUri:
       'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
   },
@@ -65,9 +69,197 @@ export const MOCK_REELS: ReelItemData[] = [
     languageLabel: 'Spanish',
     title: 'Amigos',
     topic: 'Conversation',
+    topicLocal: 'Conversación',
     transcript: 'Cuando vuelvas de tu viaje, cenamos juntos y me cuentas todo.',
     translation: 'When you get back from your trip, we’ll have dinner and you tell me everything.',
     level: 3,
+    likeCount: 567,
+    accentColor: '#fbbf24',
+    hashtags: ['#amigos', '#viaje', '#planes'],
+    authorHandle: 'lingua_es',
+    commentCount: 33,
+    videoUri:
+      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+  },
+  {
+    id: '5',
+    language: 'es',
+    languageLabel: 'Spanish',
+    title: 'Playa',
+    topic: 'Leisure',
+    topicLocal: 'Ocio',
+    transcript: 'Hoy hace un sol espectacular, ¿vamos a darnos un chapuzón?',
+    translation: 'It’s gorgeous sunshine today—shall we go for a dip?',
+    level: 1,
+    likeCount: 3421,
+    accentColor: '#22d3ee',
+    topicColor: 'rgba(34, 211, 238, 0.35)',
+    hashtags: ['#verano', '#playa', '#sol'],
+    authorHandle: 'lingua_es',
+    commentCount: 312,
+    videoUri:
+      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+  },
+  {
+    id: '6',
+    language: 'fr',
+    languageLabel: 'French',
+    title: 'Boulangerie',
+    topic: 'Food',
+    topicLocal: 'Nourriture',
+    transcript: 'Je voudrais une baguette bien croustillante, s’il vous plaît.',
+    translation: 'I’d like a really crispy baguette, please.',
+    level: 1,
+    likeCount: 987,
+    accentColor: '#a78bfa',
+    hashtags: ['#boulangerie', '#baguette', '#français'],
+    authorHandle: 'lingua_fr',
+    commentCount: 67,
+    videoUri:
+      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+  },
+  {
+    id: '7',
+    language: 'fr',
+    languageLabel: 'French',
+    title: 'Salutations',
+    topic: 'Basics',
+    topicLocal: 'Bases',
+    transcript: 'Enchanté de faire votre connaissance, comment allez-vous?',
+    translation: 'Nice to meet you—how are you?',
+    level: 1,
+    likeCount: 1544,
+    accentColor: '#fb7185',
+    hashtags: ['#salutations', '#politesse', '#parler'],
+    authorHandle: 'lingua_fr',
+    commentCount: 112,
+    videoUri:
+      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+  },
+  {
+    id: '8',
+    language: 'es',
+    languageLabel: 'Spanish',
+    title: 'Trabajo',
+    topic: 'Work',
+    topicLocal: 'Trabajo',
+    transcript: 'Terminamos la reunión antes de las cinco si nos enfocamos.',
+    translation: 'We’ll finish the meeting before five if we stay focused.',
+    level: 2,
+    likeCount: 721,
+    accentColor: '#4ade80',
+    hashtags: ['#oficina', '#reunión', '#enfoque'],
+    authorHandle: 'lingua_es',
+    commentCount: 41,
+    videoUri:
+      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+  },
+  {
+    id: '9',
+    language: 'es',
+    languageLabel: 'Spanish',
+    title: 'Música',
+    topic: 'Culture',
+    topicLocal: 'Cultura',
+    transcript: 'Este ritmo me recuerda a los festivales de verano en Valencia.',
+    translation: 'This rhythm reminds me of summer festivals in Valencia.',
+    level: 3,
+    likeCount: 2890,
+    accentColor: '#f97316',
+    hashtags: ['#música', '#festival', '#verano'],
+    authorHandle: 'lingua_es',
+    commentCount: 278,
+    videoUri:
+      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+  },
+  {
+    id: '10',
+    language: 'es',
+    languageLabel: 'Spanish',
+    title: 'Noche',
+    topic: 'Night out',
+    topicLocal: 'Salida nocturna',
+    transcript: 'Reservamos mesa para nueve y pedimos tapas para compartir.',
+    translation: 'We booked a table for nine and ordered tapas to share.',
+    level: 2,
+    likeCount: 1102,
+    accentColor: '#ec4899',
+    topicColor: 'rgba(236, 72, 153, 0.4)',
+    hashtags: ['#tapas', '#noche', '#restaurante'],
+    authorHandle: 'lingua_es',
+    commentCount: 95,
+    videoUri:
+      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+  },
+  {
+    id: '11',
+    language: 'de',
+    languageLabel: 'German',
+    title: 'Kaffeezeit',
+    topic: 'Daily life',
+    topicLocal: 'Alltag',
+    transcript: 'Einen Kaffee zum Mitnehmen oder lieber hier trinken?',
+    translation: 'Takeaway coffee or would you rather drink it here?',
+    level: 1,
+    likeCount: 876,
+    accentColor: '#facc15',
+    hashtags: ['#Kaffee', '#Deutsch', '#Berlin'],
+    authorHandle: 'lingua_de',
+    commentCount: 48,
+    videoUri:
+      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+  },
+  {
+    id: '12',
+    language: 'it',
+    languageLabel: 'Italian',
+    title: 'Caffè al bar',
+    topic: 'Food',
+    topicLocal: 'Cibo',
+    transcript: 'Un espresso macchiato, per favore, e un bicchiere d’acqua.',
+    translation: 'A macchiato espresso, please, and a glass of water.',
+    level: 1,
+    likeCount: 1432,
+    accentColor: '#14b8a6',
+    hashtags: ['#caffè', '#italiano', '#Roma'],
+    authorHandle: 'lingua_it',
+    commentCount: 88,
+    videoUri:
+      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+  },
+  {
+    id: '13',
+    language: 'ja',
+    languageLabel: 'Japanese',
+    title: '朝のカフェ',
+    topic: 'Daily life',
+    topicLocal: '日常',
+    transcript: '今日はラテにしますか、それともアメリカーノですか。',
+    translation: 'Will you have a latte today, or an Americano?',
+    level: 2,
+    likeCount: 2567,
+    accentColor: '#fb7185',
+    hashtags: ['#日本語', '#東京', '#カフェ'],
+    authorHandle: 'lingua_ja',
+    commentCount: 190,
+    videoUri:
+      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+  },
+  {
+    id: '14',
+    language: 'ko',
+    languageLabel: 'Korean',
+    title: '카페에서',
+    topic: 'Food',
+    topicLocal: '음식',
+    transcript: '아이스 아메리카노 한 잔이랑 빵 하나 주세요.',
+    translation: 'One iced Americano and a piece of bread, please.',
+    level: 1,
+    likeCount: 1988,
+    accentColor: '#a855f7',
+    hashtags: ['#한국어', '#서울', '#커피'],
+    authorHandle: 'lingua_ko',
+    commentCount: 156,
     videoUri:
       'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
   },

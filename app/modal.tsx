@@ -1,19 +1,22 @@
+import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Platform, StyleSheet } from 'react-native';
 
 import { Text, View } from '@/components/Themed';
+import { useLocale } from '@/contexts/LocaleContext';
 
 export default function AboutModal() {
+  const { t } = useLocale();
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Lingua</Text>
-      <Text style={styles.body}>
-        Short-form language reels: swipe through clips with captions and translations.
-        The active clip plays automatically; sound starts muted — tap the speaker to
-        unmute. Swap `constants/mockReels.ts` for your own video URLs and transcripts.
-      </Text>
-      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-    </View>
+    <>
+      <Stack.Screen options={{ title: t('about.navTitle') }} />
+      <View style={styles.container}>
+        <Text style={styles.title}>{t('about.title')}</Text>
+        <Text style={styles.body}>{t('about.body')}</Text>
+        <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+      </View>
+    </>
   );
 }
 

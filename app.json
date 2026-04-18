@@ -31,7 +31,17 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": ["expo-router", "expo-video"],
+    "plugins": [
+      "expo-router",
+      "expo-video",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icon.png",
+          "color": "#2196F3"
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": true
     }
