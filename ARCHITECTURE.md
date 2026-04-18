@@ -2,9 +2,9 @@
 
 This document sketches how the **clickable prototype** in this repo connects to a fuller **TikTok-for-languages** stack. The app ships with **local-only** drills, saved phrases, and progress; production backends are out of scope for the first slice.
 
-**Running the app (Mac Simulator, Windows, physical iPhone):** see [DEVELOPMENT.md](./DEVELOPMENT.md).
+**Running the app (Mac Simulator, Windows, physical iPhone):** see [DEVELOPMENT.md](./DEVELOPMENT.md) if present, otherwise `npm run dev` or `npm start` from this directory.
 
-**API server:** from repo root run `npm run dev` (starts Expo + `Lingua/backend`), or `cd Lingua/backend && npm install && npm run dev` for the Fastify process only.
+**API server (optional):** use a parent workspace that starts Expo + `Lingua/backend`, or `cd backend && npm install && npm run dev` for the Fastify process only when you have the backend checked in.
 
 ## Client app (Expo web + native)
 
@@ -41,11 +41,13 @@ Paste the returned `session` / `id` into the app (or into `EXPO_PUBLIC_KNOT_SESS
 | **`/tutor/chat`** | Text fallback; calls `sendChatMessage` (`POST /chat` when `EXPO_PUBLIC_BACKEND_URL` is set). |
 | **`TutorDrawer`** | Reel word tap / long-press: gloss + Spectrum-style explanation + **Ask more** / **Talk to tutor** + phrase save (shared `PhraseSaveSection`). |
 | **`lib/tutorApi.ts`** | `createTutorSession`, `endTutorSession`, `sendChatMessage` — calls `EXPO_PUBLIC_BACKEND_URL`. |
-| **`backend/`** (inside this repo) | Fastify server: `POST /chat`, Spectrum webhook, `POST /tutor/session` (LiveAvatar FULL), `GET /tutor/verify`. Env: `backend/.env.example`. |
+| **`backend/`** (when present) | Fastify server: `POST /chat`, Spectrum webhook, `POST /tutor/session` (LiveAvatar FULL), `GET /tutor/verify`. Env: `backend/.env.example`. |
 
 **Env:** `EXPO_PUBLIC_BACKEND_URL` — when unset, chat returns a friendly stub and LiveAvatar session URL is empty (placeholder UI).
 
 **Deep links:** App scheme `lingua` — e.g. `lingua://tutor?topic=subjunctive` opens `/tutor` with `topic` (handled via `useLocalSearchParams`).
+
+**Future stack (reference):** LiveAvatar / HeyGen-style video, STT, LLM router (e.g. Jais 2 / K2-Think), TTS — see roadmap issues or design docs.
 
 ## Optional env (not required for the prototype)
 
