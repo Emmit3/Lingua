@@ -1,9 +1,9 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useVideoPlayer, VideoView } from 'expo-video';
 import { LinearGradient } from 'expo-linear-gradient';
 import { memo, useCallback, useEffect, type ReactNode, useState } from 'react';
 import {
+  Image,
   Platform,
   Pressable,
   StyleSheet,
@@ -38,6 +38,7 @@ import { tokenizeCaption } from '@/lib/tokenize';
 import type { ReelItemData } from '@/types/reel';
 
 import { ReelBottomBar, REEL_BOTTOM_BAR_HEIGHT } from './ReelBottomBar';
+import { ReelVideoLayer } from './ReelVideoLayer';
 import { TranslateSheet } from './TranslateSheet';
 
 type Props = {
@@ -184,29 +185,17 @@ function ReelItemInner({
   const [saved, setSaved] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [sheetWord, setSheetWord] = useState('');
+  const [playbackStarted, setPlaybackStarted] = useState(false);
   const heartScale = useSharedValue(1);
-
-  const player = useVideoPlayer({ uri: item.videoUri }, (p) => {
-    p.loop = true;
-    p.muted = muted;
-  });
-
-  useEffect(() => {
-    player.muted = muted;
-  }, [muted, player]);
-
-  useEffect(() => {
-    if (isActive) {
-      player.play();
-    } else {
-      player.pause();
-      player.currentTime = 0;
-    }
-  }, [isActive, player]);
 
   useEffect(() => {
     setSaved(false);
+    setPlaybackStarted(false);
   }, [item.id]);
+
+  useEffect(() => {
+    if (!isActive) setPlaybackStarted(false);
+  }, [isActive]);
 
   const triggerFlash = useCallback(() => {
     setHeartFlash((n) => n + 1);
@@ -248,15 +237,33 @@ function ReelItemInner({
     <View style={[styles.root, { height, width }]}>
       <GestureDetector gesture={doubleTap}>
         <View style={StyleSheet.absoluteFill}>
-          <VideoView
-            player={player}
-            style={StyleSheet.absoluteFill}
-            contentFit="cover"
-            nativeControls={false}
-            {...(Platform.OS === 'android'
-              ? { surfaceType: 'textureView' as const }
-              : {})}
-          />
+          {playbackStarted ? (
+            <ReelVideoLayer item={item} isActive={isActive} muted={muted} />
+          ) : (
+            <View style={styles.videoGateRoot} pointerEvents="box-none">
+              {item.thumbnailUrl ? (
+                <Image
+                  source={{ uri: item.thumbnailUrl }}
+                  style={StyleSheet.absoluteFill}
+                  resizeMode="cover"
+                />
+              ) : (
+                <View style={[StyleSheet.absoluteFill, styles.videoGateFallback]} />
+              )}
+              <View style={styles.videoGateScrim} pointerEvents="none" />
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={t('reel.playVideoA11y')}
+                onPress={() => setPlaybackStarted(true)}
+                style={({ pressed }) => [
+                  styles.videoGateButton,
+                  pressed && { opacity: 0.92, transform: [{ scale: 0.98 }] },
+                ]}>
+                <Ionicons name="play-circle" size={76} color="rgba(255,255,255,0.95)" />
+                <Text style={styles.videoGateLabel}>{t('reel.playVideo')}</Text>
+              </Pressable>
+            </View>
+          )}
         </View>
       </GestureDetector>
 
@@ -311,19 +318,21 @@ function ReelItemInner({
       </View>
 
       {/* Top: mute — Reels often show controls top-right */}
-      <IgPressable
-        onPress={onToggleMute}
-        accessibilityLabel={muted ? t('reel.unmuteA11y') : t('reel.muteA11y')}
-        hitSlop={12}
-        style={[styles.muteTop, { top: overlayTopOffset, right: 14 }]}>
-        <View style={styles.muteBubble}>
-          <Ionicons
-            name={muted ? 'volume-mute' : 'volume-high'}
-            size={26}
-            color="#fff"
-          />
-        </View>
-      </IgPressable>
+      {playbackStarted ? (
+        <IgPressable
+          onPress={onToggleMute}
+          accessibilityLabel={muted ? t('reel.unmuteA11y') : t('reel.muteA11y')}
+          hitSlop={12}
+          style={[styles.muteTop, { top: overlayTopOffset, right: 14 }]}>
+          <View style={styles.muteBubble}>
+            <Ionicons
+              name={muted ? 'volume-mute' : 'volume-high'}
+              size={26}
+              color="#fff"
+            />
+          </View>
+        </IgPressable>
+      ) : null}
 
       {/* Right rail — floating icons, no pill (Instagram) */}
       <View
@@ -490,6 +499,32 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
     overflow: 'hidden',
   } as ViewStyle,
+  videoGateRoot: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: '#0a0a0a',
+  },
+  videoGateFallback: {
+    backgroundColor: '#111',
+  },
+  videoGateScrim: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.35)',
+  },
+  videoGateButton: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  videoGateLabel: {
+    marginTop: 12,
+    color: '#fff',
+    fontSize: 17,
+    fontWeight: '800',
+    letterSpacing: 0.3,
+    textShadowColor: 'rgba(0,0,0,0.75)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 6,
+  },
   bottomBarWrap: {
     position: 'absolute',
     left: 12,

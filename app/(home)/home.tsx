@@ -2,20 +2,24 @@ import { useFocusEffect } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { addDays, isBefore, startOfDay, startOfWeek } from 'date-fns';
 import { useCallback, useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CourseCard } from '@/components/home/CourseCard';
+import { AppFont } from '@/constants/appFonts';
 import { StatRing } from '@/components/home/StatRing';
 import { WeekStrip } from '@/components/home/WeekStrip';
+import { useLocale } from '@/contexts/LocaleContext';
 import { loadLearningLanguage } from '@/lib/learningLanguageStorage';
 import { useOnboardingStore } from '@/store/useOnboardingStore';
 
 const TAB_BAR_SPACE = 88;
 
 export default function HomeDashboardScreen() {
+  const { t } = useLocale();
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const studyMinutes = useOnboardingStore((s) => s.studyMinutes);
@@ -40,9 +44,9 @@ export default function HomeDashboardScreen() {
 
   return (
     <LinearGradient
-      colors={['#2196F3', '#1565C0', '#0D3B8C']}
-      start={{ x: 0.2, y: 0 }}
-      end={{ x: 0.8, y: 1 }}
+      colors={['#0a0a0a', '#111111', '#171717']}
+      start={{ x: 0.5, y: 0 }}
+      end={{ x: 0.5, y: 1 }}
       style={{ flex: 1 }}>
       <StatusBar style="light" />
       <View
@@ -51,15 +55,28 @@ export default function HomeDashboardScreen() {
           paddingTop: insets.top + 8,
           paddingBottom: TAB_BAR_SPACE + insets.bottom,
         }}>
-        <View className="flex-row items-center justify-between px-5">
-          <View className="flex-row items-center rounded-full bg-white/20 px-3 py-2">
-            <Text className="text-base">🔥</Text>
-            <Text className="ml-1 text-sm font-bold text-white">1</Text>
+        <View className="relative min-h-[44px] justify-center px-5">
+          <View
+            className="flex-row items-center justify-between"
+            style={{ zIndex: 2 }}
+            pointerEvents="box-none">
+            <View className="flex-row items-center rounded-full border border-white/15 bg-white/5 px-3 py-2">
+              <FontAwesome name="fire" size={14} color="#d4d4d4" />
+              <Text className="ml-1.5 text-sm font-semibold text-neutral-100">1</Text>
+            </View>
+            <View className="flex-row items-center rounded-full border border-white/15 bg-white/5 px-3 py-2">
+              <FontAwesome name="book" size={14} color="#d4d4d4" />
+              <Text className="ml-1.5 text-sm font-semibold text-neutral-100">4 words</Text>
+            </View>
           </View>
-          <Text className="text-xl font-semibold lowercase tracking-tight text-white">lingua</Text>
-          <View className="flex-row items-center rounded-full bg-white/20 px-3 py-2">
-            <Text className="text-base">📖</Text>
-            <Text className="ml-1 text-sm font-bold text-white">4 words</Text>
+          <View
+            pointerEvents="none"
+            style={[StyleSheet.absoluteFillObject, { zIndex: 1, alignItems: 'center', justifyContent: 'center' }]}>
+            <Text
+              className="text-xl lowercase tracking-tight text-white"
+              style={{ fontFamily: AppFont.serif }}>
+              lingua
+            </Text>
           </View>
         </View>
 
@@ -77,11 +94,21 @@ export default function HomeDashboardScreen() {
             accessibilityRole="button"
             className="mt-8 flex-row items-center rounded-full bg-white px-10 py-4 active:opacity-90"
             onPress={() => router.push('/(home)/feed')}>
-            <Text className="text-lg font-bold text-brand-blue">▶ Continue</Text>
+            <Text className="text-lg font-semibold text-neutral-950">Continue</Text>
           </Pressable>
         </View>
 
-        <View className="mt-auto rounded-t-3xl bg-white px-5 pb-6 pt-5">
+        <View className="mt-auto border-t border-white/10 bg-neutral-950 px-5 pb-6 pt-5">
+          <View className="mb-3 flex-row justify-end">
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('tab.profile')}
+              accessibilityHint="Opens your profile and settings"
+              onPress={() => router.push('/(home)/profile')}
+              className="h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/5 active:opacity-80">
+              <FontAwesome name="user" size={18} color="#e5e5e5" />
+            </Pressable>
+          </View>
           <Pressable
             accessibilityRole="button"
             accessibilityHint="Opens the courses tab with your learning path"

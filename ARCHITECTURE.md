@@ -6,6 +6,8 @@ This document sketches how the **clickable prototype** in this repo connects to 
 
 **API server (optional):** use a parent workspace that starts Expo + `Lingua/backend`, or `cd backend && npm install && npm run dev` for the Fastify process only when you have the backend checked in.
 
+**Maya tutor (HeyGen + Claude, web lab):** the **Next** app in `reference-nextjs-api/` exposes `POST /api/tutor/token` (HeyGen one-time token) and `POST /api/tutor/respond` (Claude with `lib/tutorPrompt.ts`). **`@heygen/streaming-avatar`** on **`/tutor`** speaks tutor lines with **`TaskType.REPEAT`**. Env: `HEYGEN_API_KEY`, `NEXT_PUBLIC_HEYGEN_AVATAR_ID`, `NEXT_PUBLIC_HEYGEN_VOICE_ID`, `ANTHROPIC_API_KEY`. Native Expo would use a **WebView** to this page or call the same APIs from your backend.
+
 ## Client app (Expo web + native)
 
 - **Profile languages:** **Interface locale** (`APP_LOCALES` + flags in `constants/appLocale.ts`, UI strings in `lib/uiStrings.ts`) and **study language** for Shorts (`constants/learningLanguages.ts`, `lib/learningLanguageStorage.ts`) — pickers in `app/(home)/profile.tsx` + `components/profile/LanguagePickerModal.tsx`. Changing study language bumps `useLearningLanguageVersionStore` so `ReelFeed` refetches.

@@ -4,6 +4,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "expo start",
+    "proxy:dev": "npm run dev --prefix reference-nextjs-api",
+    "dev:with-proxy": "concurrently -n expo,proxy -c cyan,blue \"expo start\" \"npm run dev --prefix reference-nextjs-api\"",
     "dev:lan-flask": "python lan_dev_server.py",
     "dev:with-lan-flask": "concurrently -n expo,flask -c cyan,magenta \"expo start\" \"python lan_dev_server.py\"",
     "start": "expo start",
@@ -21,9 +23,11 @@
     "build:android:apk": "eas build -p android --profile preview",
     "build:ios": "eas build -p ios --profile production",
     "build:web": "expo export --platform web",
-    "test:servers": "node scripts/test-servers.mjs"
+    "test:servers": "node scripts/test-servers.mjs",
+    "verify:youtube": "node reference-nextjs-api/scripts/verify-youtube.mjs"
   },
   "dependencies": {
+    "@expo-google-fonts/fraunces": "^0.4.1",
     "@expo-google-fonts/inter": "^0.4.2",
     "@expo-google-fonts/space-mono": "^0.4.2",
     "@expo/vector-icons": "^15.0.3",
@@ -61,8 +65,8 @@
     "zustand": "^5.0.12"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2",
     "@types/react": "~19.1.0",
+    "concurrently": "^9.1.2",
     "react-test-renderer": "19.1.0",
     "typescript": "~5.9.2"
   },

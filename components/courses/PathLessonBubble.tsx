@@ -19,10 +19,10 @@ export function PathLessonBubble({ lesson, status, accent, onPress }: Props) {
   const completed = status === 'completed';
   const active = status === 'active';
 
-  const bg = locked ? '#E5E7EB' : completed ? accent : '#FFFFFF';
-  const border = active ? accent : locked ? '#D1D5DB' : completed ? accent : '#E5E7EB';
+  const bg = locked ? '#27272a' : completed ? accent : '#18181b';
+  const border = active ? accent : locked ? '#3f3f46' : completed ? accent : '#52525b';
   const borderWidth = active ? 4 : 2;
-  const iconColor = locked ? '#9CA3AF' : completed ? '#FFFFFF' : accent;
+  const iconColor = locked ? '#71717a' : completed ? '#FFFFFF' : accent;
 
   return (
     <Pressable
@@ -44,9 +44,9 @@ export function PathLessonBubble({ lesson, status, accent, onPress }: Props) {
           justifyContent: 'center',
           shadowColor: '#000',
           shadowOffset: { width: 0, height: 3 },
-          shadowOpacity: active ? 0.18 : 0.08,
-          shadowRadius: 6,
-          elevation: active ? 6 : 2,
+          shadowOpacity: active ? 0.35 : 0.2,
+          shadowRadius: active ? 10 : 6,
+          elevation: active ? 8 : 3,
         }}>
         {lesson.kind === 'checkpoint' ? (
           <FontAwesome
@@ -63,12 +63,12 @@ export function PathLessonBubble({ lesson, status, accent, onPress }: Props) {
         )}
       </View>
       <Text
-        className="mt-2 px-1 text-center text-xs font-bold leading-4 text-[#374151]"
+        className="mt-2 px-1 text-center text-xs font-bold leading-4 text-neutral-200"
         numberOfLines={2}>
         {lesson.title}
       </Text>
       {!locked ? (
-        <Text className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#9CA3AF]">
+        <Text className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-neutral-500">
           +{lesson.xp} xp
         </Text>
       ) : null}

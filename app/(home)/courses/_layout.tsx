@@ -6,9 +6,11 @@ export default function CoursesStackLayout() {
       screenOptions={{
         headerShown: true,
         headerBackTitle: 'Back',
-        headerTintColor: '#1565C0',
-        headerTitleStyle: { fontWeight: '700' },
-        contentStyle: { backgroundColor: '#FFFFFF' },
+        headerTintColor: '#fafafa',
+        headerTitleStyle: { fontWeight: '700', color: '#fafafa' },
+        headerStyle: { backgroundColor: '#0a0a0a' },
+        headerShadowVisible: false,
+        contentStyle: { backgroundColor: '#0a0a0a' },
       }}>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen

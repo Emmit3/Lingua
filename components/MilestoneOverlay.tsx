@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   title: {
-    fontFamily: AppFont.display,
+    fontFamily: AppFont.serif,
     fontSize: 32,
     fontWeight: '700',
     textAlign: 'center',

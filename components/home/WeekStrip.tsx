@@ -20,7 +20,7 @@ export function WeekStrip({ startOfWeek, completedDays, today }: Props) {
         return (
           <View key={i} className="items-center" style={{ width: 36 }}>
             <Text
-              className={`text-xs font-medium ${isToday ? 'text-white' : 'text-white/55'}`}>
+              className={`text-xs font-medium ${isToday ? 'text-white' : 'text-white/45'}`}>
               {label}
             </Text>
             <View
@@ -28,12 +28,12 @@ export function WeekStrip({ startOfWeek, completedDays, today }: Props) {
                 isToday
                   ? 'bg-white'
                   : done
-                    ? 'border border-dashed border-white/40 bg-white/10'
-                    : 'border border-dashed border-white/25'
+                    ? 'border border-white/20 bg-white/5'
+                    : 'border border-white/12 bg-transparent'
               }`}>
               <Text
                 className={`text-xs font-semibold ${
-                  isToday ? 'text-brand-blue' : done ? 'text-white/80' : 'text-white/45'
+                  isToday ? 'text-neutral-950' : done ? 'text-white/75' : 'text-white/35'
                 }`}>
                 {format(d, 'd')}
               </Text>

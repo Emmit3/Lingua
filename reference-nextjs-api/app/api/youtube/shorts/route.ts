@@ -59,6 +59,9 @@ export async function GET(req: NextRequest) {
   if (pageToken) searchUrl.searchParams.set('pageToken', pageToken);
   searchUrl.searchParams.set('key', key);
 
+  const debug =
+    process.env.YOUTUBE_PROXY_DEBUG === '1' || process.env.YOUTUBE_PROXY_DEBUG === 'true';
+
   try {
     const sRes = await fetch(searchUrl.toString());
     const sJson = (await sRes.json()) as {
@@ -77,6 +80,18 @@ export async function GET(req: NextRequest) {
     }
 
     const rawItems = sJson.items ?? [];
+    if (debug) {
+      console.info(
+        '[youtube/shorts] search.list',
+        JSON.stringify({
+          q,
+          maxResults,
+          searchCap,
+          httpOk: sRes.ok,
+          rawItemCount: rawItems.length,
+        }),
+      );
+    }
     const ids = rawItems
       .map((it) => it.id?.videoId)
       .filter((id): id is string => typeof id === 'string' && id.length > 0);
@@ -158,6 +173,17 @@ export async function GET(req: NextRequest) {
       });
 
       if (out.length >= maxResults) break;
+    }
+
+    if (debug) {
+      console.info(
+        '[youtube/shorts] done',
+        JSON.stringify({
+          idsFromSearch: ids.length,
+          returnedItems: out.length,
+          hasNextPage: Boolean(nextPageToken),
+        }),
+      );
     }
 
     return NextResponse.json({ items: out, nextPageToken }, { headers: API_CORS_HEADERS });

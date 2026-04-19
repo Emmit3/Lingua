@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
   streakNum: {
-    fontFamily: AppFont.display,
+    fontFamily: AppFont.serif,
     fontSize: 36,
     fontWeight: '700',
     lineHeight: 40,

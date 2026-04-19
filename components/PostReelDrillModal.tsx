@@ -4,11 +4,14 @@ import {
   Modal,
   Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
+  useWindowDimensions,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, {
   Easing,
   FadeIn,
@@ -26,6 +29,7 @@ import {
   defaultAccentHex,
   quizDimColor,
 } from '@/constants/designTokens';
+import { homeTabBarTopFromBottom } from '@/constants/homeTabBar';
 import { useLocale } from '@/contexts/LocaleContext';
 import { glossSpanishWord } from '@/lib/mockWordGloss';
 import { tokenizeCaption } from '@/lib/tokenize';
@@ -74,6 +78,8 @@ export function PostReelDrillModal({
   accentHex = defaultAccentHex,
 }: Props) {
   const { t } = useLocale();
+  const insets = useSafeAreaInsets();
+  const { height: windowHeight } = useWindowDimensions();
   const [clozeInput, setClozeInput] = useState('');
   const [selectedPick, setSelectedPick] = useState<string | null>(null);
   const [pickPhase, setPickPhase] = useState<
@@ -286,24 +292,34 @@ export function PostReelDrillModal({
   }, [onComplete, handleClose, triggerCorrectCelebration]);
 
   const dimColor = quizDimColor(accentHex);
+  /** Keep the sheet above the floating home tab bar (same inset math as ReelBottomBar). */
+  const sheetBottomMargin = homeTabBarTopFromBottom(insets.bottom) + 12;
+  /** Cap scroll area so pick/cloze modes stay scrollable on short screens. */
+  const sheetBodyMaxHeight = Math.round(Math.min(560, windowHeight * 0.58));
 
   if (!item) return null;
 
-  return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="none"
-      onRequestClose={handleClose}>
-      <View style={styles.modalRoot}>
-        <Animated.View style={[styles.backdropFill, { backgroundColor: dimColor }, backdropStyle]}>
-          <Pressable style={StyleSheet.absoluteFill} onPress={handleClose} />
-        </Animated.View>
+  /** Web: RN Modal portals to `document.body`, so the sheet spans the full browser — not the WebDeviceShell phone width. Inline overlay stays inside the feed tree. */
+  const useInlineOverlay = Platform.OS === 'web';
 
-        <Animated.View
-          style={[styles.sheet, sheetAnimStyle, { borderColor: `${accentHex}44` }]}
-          pointerEvents="box-none">
-          <View style={styles.sheetInner}>
+  const overlay = (
+    <View style={styles.modalRoot}>
+      <Animated.View style={[styles.backdropFill, { backgroundColor: dimColor }, backdropStyle]}>
+        <Pressable style={StyleSheet.absoluteFill} onPress={handleClose} />
+      </Animated.View>
+
+      <Animated.View
+        style={[
+          styles.sheet,
+          sheetAnimStyle,
+          { borderColor: `${accentHex}44`, marginBottom: sheetBottomMargin },
+        ]}
+        pointerEvents="box-none">
+          <ScrollView
+            style={{ maxHeight: sheetBodyMaxHeight }}
+            contentContainerStyle={styles.sheetScrollContent}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}>
             <Text style={[styles.questionTitle, { color: accentHex }]}>
               {t('drill.title')}
             </Text>
@@ -457,7 +473,7 @@ export function PostReelDrillModal({
               style={styles.secondary}>
               <Text style={styles.secondaryText}>{t('drill.skip')}</Text>
             </Pressable>
-          </View>
+          </ScrollView>
 
           <Animated.View
             pointerEvents="none"
@@ -469,7 +485,21 @@ export function PostReelDrillModal({
             </Text>
           </Animated.View>
         </Animated.View>
+    </View>
+  );
+
+  if (useInlineOverlay) {
+    if (!visible) return null;
+    return (
+      <View style={styles.webOverlayRoot} pointerEvents="box-none">
+        {overlay}
       </View>
+    );
+  }
+
+  return (
+    <Modal visible={visible} transparent animationType="none" onRequestClose={handleClose}>
+      {overlay}
     </Modal>
   );
 }
@@ -486,6 +516,11 @@ function shuffleArr<T>(arr: T[]): T[] {
 }
 
 const styles = StyleSheet.create({
+  /** Fills ReelFeed so Quick drill stays within WebDeviceShell width on desktop web. */
+  webOverlayRoot: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 100,
+  },
   modalRoot: {
     flex: 1,
     justifyContent: 'flex-end',
@@ -495,20 +530,19 @@ const styles = StyleSheet.create({
   },
   sheet: {
     marginHorizontal: 12,
-    marginBottom: Platform.OS === 'ios' ? 28 : 16,
     maxHeight: '85%',
     borderRadius: 20,
     borderWidth: StyleSheet.hairlineWidth,
     backgroundColor: '#FAFAF8',
     overflow: 'hidden',
   },
-  sheetInner: {
+  sheetScrollContent: {
     padding: 16,
-    paddingBottom: 20,
+    paddingBottom: 24,
   },
   questionTitle: {
-    fontFamily: AppFont.bodyBold,
-    fontSize: 22,
+    fontFamily: AppFont.serif,
+    fontSize: 24,
     marginBottom: 4,
   },
   meta: {
@@ -619,7 +653,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '700',
     color: '#1A1A1A',
-    fontFamily: AppFont.bodyBold,
+    fontFamily: AppFont.serif,
   },
   flashOverlay: {
     ...StyleSheet.absoluteFillObject,
@@ -632,7 +666,7 @@ const styles = StyleSheet.create({
     opacity: 0,
   },
   pointsFloatText: {
-    fontFamily: AppFont.display,
+    fontFamily: AppFont.serif,
     fontSize: 36,
     fontWeight: '700',
   },

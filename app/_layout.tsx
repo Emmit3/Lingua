@@ -6,6 +6,7 @@ import {
   Inter_600SemiBold,
   Inter_700Bold,
 } from '@expo-google-fonts/inter';
+import { Fraunces_700Bold } from '@expo-google-fonts/fraunces';
 import {
   SpaceMono_400Regular,
   SpaceMono_700Bold,
@@ -35,6 +36,7 @@ const fontMap = {
   Inter_400Regular,
   Inter_600SemiBold,
   Inter_700Bold,
+  Fraunces_700Bold,
   SpaceMono_400Regular,
   SpaceMono_700Bold,
 };

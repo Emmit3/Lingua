@@ -49,7 +49,7 @@ export function StatRing({ seconds, maxSeconds, size = 180 }: Props) {
             cx={cx}
             cy={cy}
             r={r}
-            stroke="rgba(255,255,255,0.35)"
+            stroke="rgba(255,255,255,0.12)"
             strokeWidth={stroke}
             fill="none"
           />
@@ -57,7 +57,7 @@ export function StatRing({ seconds, maxSeconds, size = 180 }: Props) {
             cx={cx}
             cy={cy}
             r={r}
-            stroke="#FFFFFF"
+            stroke="#fafafa"
             strokeWidth={stroke}
             fill="none"
             strokeDasharray={c}
@@ -68,7 +68,7 @@ export function StatRing({ seconds, maxSeconds, size = 180 }: Props) {
       </Svg>
       <View className="absolute items-center justify-center" style={{ width: size, height: size }}>
         <Text className="text-4xl font-bold text-white">{formatListening(seconds)}</Text>
-        <Text className="mt-1 text-sm text-white/90">Listening Time</Text>
+        <Text className="mt-1 text-sm text-neutral-400">Listening time</Text>
       </View>
     </View>
   );

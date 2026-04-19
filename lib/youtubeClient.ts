@@ -7,14 +7,35 @@
  * Reference: `reference-nextjs-api/app/api/youtube/shorts/route.ts`
  */
 
-const proxyBase = () =>
-  (process.env.EXPO_PUBLIC_YOUTUBE_PROXY_URL ?? process.env.EXPO_PUBLIC_BACKEND_URL ?? '').replace(
-    /\/$/,
-    '',
-  );
+import { Platform } from 'react-native';
+
+const proxyBaseRaw = () =>
+  (process.env.EXPO_PUBLIC_YOUTUBE_PROXY_URL ?? process.env.EXPO_PUBLIC_BACKEND_URL ?? '').trim();
+
+/**
+ * Android emulator: `localhost`/`127.0.0.1` points at the emulator itself, not your PC.
+ * Map to `10.0.2.2` (host loopback). Physical devices still need your PC's LAN IP in `.env`.
+ */
+export function normalizeYoutubeProxyBaseForDevice(raw: string): string {
+  const trimmed = raw.replace(/\/$/, '');
+  if (!trimmed) return trimmed;
+  try {
+    const withProto = /^https?:\/\//i.test(trimmed) ? trimmed : `http://${trimmed}`;
+    const u = new URL(withProto);
+    if (
+      Platform.OS === 'android' &&
+      (u.hostname === 'localhost' || u.hostname === '127.0.0.1')
+    ) {
+      u.hostname = '10.0.2.2';
+    }
+    return `${u.protocol}//${u.host}`;
+  } catch {
+    return trimmed;
+  }
+}
 
 export function getYoutubeProxyBase(): string {
-  const b = proxyBase();
+  const b = normalizeYoutubeProxyBaseForDevice(proxyBaseRaw());
   if (!b) {
     throw new Error(
       'Set EXPO_PUBLIC_YOUTUBE_PROXY_URL (or EXPO_PUBLIC_BACKEND_URL) to your API that proxies YouTube Data API v3.',
@@ -76,8 +97,14 @@ export async function fetchYoutubeShorts(
   if (params.language) sp.set('language', params.language);
   if (params.languageLabel) sp.set('languageLabel', params.languageLabel);
 
-  const res = await fetch(`${base}/api/youtube/shorts?${sp.toString()}`);
-  const data = (await res.json()) as YoutubeShortsApiResponse;
+  const url = `${base}/api/youtube/shorts?${sp.toString()}`;
+  const res = await fetch(url);
+  let data: YoutubeShortsApiResponse;
+  try {
+    data = (await res.json()) as YoutubeShortsApiResponse;
+  } catch {
+    throw new Error(`YouTube proxy returned non-JSON (${res.status}) — is the server running at ${base}?`);
+  }
   if (!res.ok) {
     throw new Error(data.error ?? `YouTube proxy failed (${res.status})`);
   }

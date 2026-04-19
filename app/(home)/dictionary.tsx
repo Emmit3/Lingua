@@ -1,4 +1,5 @@
 import { useFocusEffect } from '@react-navigation/native';
+import { StatusBar } from 'expo-status-bar';
 import { useCallback, useState } from 'react';
 import {
   ActivityIndicator,
@@ -9,6 +10,8 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { AppFont } from '@/constants/appFonts';
+import { Accents } from '@/constants/designTokens';
 import { glossWordForLanguage } from '@/lib/mockWordGloss';
 import { loadReelVocabulary } from '@/lib/reelVocabularyStorage';
 import { loadSavedPhrases } from '@/lib/savedPhrasesStorage';
@@ -53,6 +56,9 @@ export default function DictionaryScreen() {
 
   return (
     <ScrollView
+      className="hide-scrollbar"
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
       style={styles.scroll}
       contentContainerStyle={{
         paddingTop: contentTop,
@@ -60,12 +66,13 @@ export default function DictionaryScreen() {
         paddingHorizontal: 22,
       }}
       keyboardShouldPersistTaps="handled">
+      <StatusBar style="light" />
       <Text style={styles.title}>{t('dictionary.title')}</Text>
       <Text style={styles.sub}>{t('dictionary.subtitle')}</Text>
 
       {loading ? (
         <View style={styles.loader}>
-          <ActivityIndicator color="#2196F3" />
+          <ActivityIndicator color="#a3a3a3" />
         </View>
       ) : null}
 
@@ -119,18 +126,19 @@ export default function DictionaryScreen() {
 const styles = StyleSheet.create({
   scroll: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#0a0a0a',
   },
   title: {
+    fontFamily: AppFont.serif,
     fontSize: 28,
     fontWeight: '800',
-    color: '#121826',
+    color: Accents.coral,
     marginBottom: 8,
   },
   sub: {
     fontSize: 15,
     lineHeight: 22,
-    color: '#6B7280',
+    color: '#a3a3a3',
     marginBottom: 20,
   },
   loader: {
@@ -140,7 +148,7 @@ const styles = StyleSheet.create({
   empty: {
     fontSize: 15,
     lineHeight: 22,
-    color: '#6B7280',
+    color: '#a3a3a3',
     marginBottom: 12,
   },
   section: {
@@ -148,13 +156,13 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     letterSpacing: 0.6,
     textTransform: 'uppercase',
-    color: 'rgba(17,24,39,0.45)',
+    color: 'rgba(255,255,255,0.38)',
     marginBottom: 12,
   },
   row: {
     paddingVertical: 14,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: 'rgba(17,24,39,0.08)',
+    borderBottomColor: 'rgba(255,255,255,0.1)',
   },
   rowHead: {
     flexDirection: 'row',
@@ -164,32 +172,32 @@ const styles = StyleSheet.create({
   word: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#121826',
+    color: '#fafafa',
     flexShrink: 1,
   },
   langBadge: {
     marginLeft: 10,
     fontSize: 11,
     fontWeight: '700',
-    color: '#2196F3',
+    color: '#a3a3a3',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   gloss: {
     marginTop: 4,
     fontSize: 15,
-    color: '#374151',
+    color: '#d4d4d4',
     fontWeight: '500',
   },
   meta: {
     marginTop: 6,
     fontSize: 12,
-    color: '#9CA3AF',
+    color: '#737373',
     fontWeight: '600',
   },
   metaMuted: {
     marginTop: 6,
     fontSize: 12,
-    color: '#9CA3AF',
+    color: '#737373',
   },
 });

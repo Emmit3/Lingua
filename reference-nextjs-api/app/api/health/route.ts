@@ -10,7 +10,7 @@ export async function GET() {
   return NextResponse.json(
     {
       ok: true,
-      routes: ['/api/health', '/api/youtube/shorts'],
+      routes: ['/api/health', '/api/youtube/verify', '/api/youtube/shorts'],
       configured: {
         youtubeApiKey: Boolean(process.env.YOUTUBE_API_KEY?.trim()),
       },

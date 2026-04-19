@@ -28,9 +28,9 @@ export default function LessonScreen() {
   if (!lesson) {
     return (
       <View
-        className="flex-1 items-center justify-center bg-white px-6"
+        className="flex-1 items-center justify-center bg-[#0a0a0a] px-6"
         style={{ paddingBottom: insets.bottom }}>
-        <Text className="text-center text-[#6B7280]">This lesson could not be found.</Text>
+        <Text className="text-center text-neutral-500">This lesson could not be found.</Text>
       </View>
     );
   }
@@ -38,7 +38,7 @@ export default function LessonScreen() {
   return (
     <>
       <Stack.Screen options={{ title: lesson.title }} />
-      <View className="flex-1 bg-white" style={{ paddingBottom: insets.bottom + 8 }}>
+      <View className="flex-1 bg-[#0a0a0a]" style={{ paddingBottom: insets.bottom + 8 }}>
         <PracticeQuiz
           title={lesson.kind === 'checkpoint' ? 'Checkpoint' : 'Practice'}
           questions={questionsForLesson(lesson)}

@@ -18,6 +18,8 @@ export type ReelItemData = {
   youtubeVideoId?: string;
   /** When set with `youtubeVideoId`, WebView loads this base embed URL + player query params. */
   youtubeEmbedUrl?: string;
+  /** Poster image (e.g. YouTube thumbnail) for tap-to-play placeholder. */
+  thumbnailUrl?: string;
   /** Baseline engagement count (does not include the current user’s like). */
   likeCount: number;
   /** Optional hex for chips / like heart accents. */

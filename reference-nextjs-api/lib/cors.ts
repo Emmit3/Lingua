@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 /** Dev-friendly CORS so Expo Web can call the proxy from another origin. */
 export const API_CORS_HEADERS: Record<string, string> = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
 };
 

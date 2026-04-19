@@ -43,6 +43,7 @@ export function reelItemFromYoutubeShort(
     videoUri: PLACEHOLDER_VIDEO_URI,
     youtubeVideoId: row.videoId,
     youtubeEmbedUrl: row.embedUrl,
+    thumbnailUrl: row.thumbnails?.medium?.url ?? row.thumbnails?.default?.url,
     likeCount: 0,
     authorHandle: slugChannel(row.channelTitle),
     hashtags: hashtags.length ? hashtags : ['#shorts'],

@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { MOCK_REELS } from '@/constants/mockReels';
 import { filterReelsByPreferredTags } from '@/lib/filterReelsByPreferredTags';
-import { fetchYoutubeShorts } from '@/lib/youtubeClient';
+import { fetchYoutubeShorts, normalizeYoutubeProxyBaseForDevice } from '@/lib/youtubeClient';
 import { reelsFromYoutubeShorts } from '@/lib/youtubeShortsTransform';
 import { loadLearningLanguage } from '@/lib/learningLanguageStorage';
 import { loadUserYoutubePreferredTags } from '@/lib/youtubePreferencesStorage';
@@ -104,10 +104,13 @@ async function writeCache(reels: ReelItemData[]): Promise<void> {
 export type ReelsLoadSource = 'youtube' | 'remote' | 'cache' | 'fallback';
 
 function youtubeProxyBase(): string | null {
-  const b = (process.env.EXPO_PUBLIC_YOUTUBE_PROXY_URL ?? process.env.EXPO_PUBLIC_BACKEND_URL ?? '')
-    .trim()
-    .replace(/\/$/, '');
-  return b || null;
+  const raw = (
+    process.env.EXPO_PUBLIC_YOUTUBE_PROXY_URL ??
+    process.env.EXPO_PUBLIC_BACKEND_URL ??
+    ''
+  ).trim();
+  if (!raw) return null;
+  return normalizeYoutubeProxyBaseForDevice(raw);
 }
 
 export async function loadReels(): Promise<{
@@ -155,7 +158,13 @@ export async function loadReels(): Promise<{
         await writeCache(reels);
         return { reels, source: 'youtube' };
       }
-    } catch {
+    } catch (e) {
+      if (__DEV__) {
+        console.warn(
+          '[loadReels] YouTube Shorts proxy failed — using cache or mock. Details:',
+          e instanceof Error ? e.message : e,
+        );
+      }
       /* fall through */
     }
     const cached = await readCache();

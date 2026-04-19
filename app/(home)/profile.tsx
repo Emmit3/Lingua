@@ -1,12 +1,13 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Text as ThemedText } from '@/components/Themed';
 import { LanguagePickerModal, type PickerRow } from '@/components/profile/LanguagePickerModal';
+import { AppFont } from '@/constants/appFonts';
 import {
   APP_LOCALES,
   LOCALE_FLAGS,
@@ -21,6 +22,7 @@ import { loadLearningLanguage, saveLearningLanguage } from '@/lib/learningLangua
 import { useLearningLanguageVersionStore } from '@/store/useLearningLanguageVersionStore';
 
 export default function ProfileScreen() {
+  const router = useRouter();
   const { locale, setLocale, t } = useLocale();
   const insets = useSafeAreaInsets();
   const contentTop = insets.top + 16;
@@ -94,6 +96,14 @@ export default function ProfileScreen() {
         { paddingTop: contentTop, paddingBottom: insets.bottom + 96 },
       ]}
       keyboardShouldPersistTaps="handled">
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={t('settings.back')}
+        onPress={() => router.push('/(home)/home')}
+        style={({ pressed }) => [styles.backRow, pressed && styles.rowPressed]}>
+        <Ionicons name="chevron-back" size={22} color="#737373" />
+        <Text style={styles.backText}>{t('settings.back')}</Text>
+      </Pressable>
       <Text style={styles.title}>{t('profile.title')}</Text>
       <Text style={styles.sub}>{t('profile.subtitle')}</Text>
 
@@ -207,7 +217,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingBottom: 32,
   },
+  backRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    marginBottom: 8,
+    paddingVertical: 6,
+    paddingRight: 12,
+    gap: 2,
+  },
+  backText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#525252',
+  },
   title: {
+    fontFamily: AppFont.serif,
     fontSize: 28,
     fontWeight: '800',
     marginBottom: 10,

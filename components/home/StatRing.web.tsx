@@ -33,7 +33,7 @@ export function StatRing({ seconds, maxSeconds, size = 180 }: Props) {
             cx={cx}
             cy={cy}
             r={r}
-            stroke="rgba(255,255,255,0.35)"
+            stroke="rgba(255,255,255,0.12)"
             strokeWidth={stroke}
             fill="none"
           />
@@ -41,7 +41,7 @@ export function StatRing({ seconds, maxSeconds, size = 180 }: Props) {
             cx={cx}
             cy={cy}
             r={r}
-            stroke="#FFFFFF"
+            stroke="#fafafa"
             strokeWidth={stroke}
             fill="none"
             strokeDasharray={c}
@@ -61,8 +61,8 @@ export function StatRing({ seconds, maxSeconds, size = 180 }: Props) {
         <Text style={{ fontSize: 36, fontWeight: '700', color: '#FFFFFF' }}>
           {formatListening(seconds)}
         </Text>
-        <Text style={{ marginTop: 4, fontSize: 14, color: 'rgba(255,255,255,0.9)' }}>
-          Listening Time
+        <Text style={{ marginTop: 4, fontSize: 14, color: '#a3a3a3' }}>
+          Listening time
         </Text>
       </View>
     </View>

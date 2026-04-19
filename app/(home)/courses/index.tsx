@@ -1,6 +1,7 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { LinearGradient } from 'expo-linear-gradient';
 import { type Href, useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import { useCallback, useState } from 'react';
 import {
   Pressable,
@@ -12,6 +13,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 
 import { PathLessonBubble } from '@/components/courses/PathLessonBubble';
+import { AppFont } from '@/constants/appFonts';
 import { COURSE_UNITS, flattenLessons, lessonUnlockState } from '@/constants/coursePathway';
 import type { LearningLanguageOption } from '@/constants/learningLanguages';
 import { loadCourseProgress } from '@/lib/courseProgressStorage';
@@ -46,10 +48,11 @@ export default function CoursesPathwayScreen() {
 
   return (
     <LinearGradient
-      colors={['#E8F7EE', '#D4F1F4', '#E8EEF9']}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
+      colors={['#050505', '#0c0c0c', '#141414']}
+      start={{ x: 0.5, y: 0 }}
+      end={{ x: 0.5, y: 1 }}
       style={{ flex: 1 }}>
+      <StatusBar style="light" />
       <ScrollView
         className="flex-1"
         contentContainerStyle={{
@@ -60,22 +63,24 @@ export default function CoursesPathwayScreen() {
         showsVerticalScrollIndicator={false}>
         <View className="flex-row items-start justify-between">
           <View className="flex-1 pr-3">
-            <Text className="text-xs font-bold uppercase tracking-widest text-[#6B7280]">
+            <Text className="text-xs font-bold uppercase tracking-widest text-neutral-500">
               Learning path
             </Text>
             <View className="mt-1 flex-row items-center gap-2">
-              <Text className="text-3xl font-extrabold text-[#121826]">
+              <Text
+                className="text-3xl font-extrabold text-white"
+                style={{ fontFamily: AppFont.serif }}>
                 {learning?.label ?? 'Your course'}
               </Text>
               <Text className="text-2xl">{languageFlagEmoji(learning?.code ?? 'es')}</Text>
             </View>
-            <Text className="mt-2 text-base text-[#6B7280]">
+            <Text className="mt-2 text-base text-neutral-400">
               {doneCount} / {totalLessons} steps completed
             </Text>
           </View>
           <View className="items-end">
-            <View className="rounded-full bg-white/90 px-3 py-2 shadow-sm">
-              <Text className="text-xs font-semibold text-[#374151]">
+            <View className="rounded-full border border-amber-500/35 bg-amber-500/10 px-3 py-2">
+              <Text className="text-xs font-semibold text-amber-100/95">
                 🔥 Keep the streak on the Home tab
               </Text>
             </View>
@@ -85,21 +90,21 @@ export default function CoursesPathwayScreen() {
         <Pressable
           accessibilityRole="button"
           onPress={() => router.push('/(home)/courses/placement' as Href)}
-          className="mt-6 flex-row items-center justify-between rounded-2xl border-2 border-[#1CB0F6] bg-white px-4 py-4 active:opacity-90">
+          className="mt-6 flex-row items-center justify-between rounded-2xl border border-cyan-500/45 bg-neutral-900/90 px-4 py-4 active:opacity-90">
           <View className="flex-row items-center gap-3">
-            <View className="h-12 w-12 items-center justify-center rounded-xl bg-[#E3F4FF]">
-              <FontAwesome name="graduation-cap" size={22} color="#1CB0F6" />
+            <View className="h-12 w-12 items-center justify-center rounded-xl bg-cyan-500/15">
+              <FontAwesome name="graduation-cap" size={22} color="#22d3ee" />
             </View>
             <View>
-              <Text className="text-base font-bold text-[#121826]">Placement test</Text>
-              <Text className="mt-0.5 text-sm text-[#6B7280]">
+              <Text className="text-base font-bold text-white">Placement test</Text>
+              <Text className="mt-0.5 text-sm text-neutral-400">
                 {placementPct != null
                   ? `Last score: ${placementPct}% · Tap to retake`
                   : '5 questions · find your level'}
               </Text>
             </View>
           </View>
-          <FontAwesome name="chevron-right" size={14} color="#9CA3AF" />
+          <FontAwesome name="chevron-right" size={14} color="#737373" />
         </Pressable>
 
         <View className="mt-10">
@@ -122,7 +127,7 @@ export default function CoursesPathwayScreen() {
                     <View key={lesson.id}>
                       {li > 0 ? (
                         <View className="mb-2 items-center">
-                          <View className="h-5 w-1 rounded-full bg-[#C8E6C9]" />
+                          <View className="h-5 w-1 rounded-full bg-neutral-700" />
                         </View>
                       ) : null}
                       <View
@@ -149,7 +154,7 @@ export default function CoursesPathwayScreen() {
           ))}
         </View>
 
-        <Text className="mt-10 text-center text-xs text-[#9CA3AF]">
+        <Text className="mt-10 text-center text-xs text-neutral-600">
           Demo pathway · progress is saved on this device
         </Text>
       </ScrollView>

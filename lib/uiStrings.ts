@@ -8,6 +8,7 @@ export type UiStringKey =
   | 'tab.reels'
   | 'tab.profile'
   | 'tab.progress'
+  | 'tab.tutor'
   | 'profile.title'
   | 'profile.subtitle'
   | 'profile.appLanguage'
@@ -31,6 +32,8 @@ export type UiStringKey =
   | 'reel.practiceA11y'
   | 'reel.muteA11y'
   | 'reel.unmuteA11y'
+  | 'reel.playVideo'
+  | 'reel.playVideoA11y'
   | 'translate.title'
   | 'translate.save'
   | 'translate.saved'
@@ -75,6 +78,8 @@ export type UiStringKey =
   | 'tutor.title'
   | 'tutor.body'
   | 'tutor.close'
+  | 'tutor.openLab'
+  | 'tutor.openLabUnavailable'
   | 'level.beginner'
   | 'level.intermediate'
   | 'level.advanced'
@@ -104,6 +109,7 @@ const EN: Record<UiStringKey, string> = {
   'tab.reels': 'Reels',
   'tab.profile': 'Profile',
   'tab.progress': 'Progress',
+  'tab.tutor': 'Tutor',
   'profile.title': 'You',
   'profile.subtitle':
     'Learning streak, saved reels, and language goals will live here.',
@@ -130,6 +136,8 @@ const EN: Record<UiStringKey, string> = {
   'reel.practiceA11y': 'Open practice drill for this reel',
   'reel.muteA11y': 'Mute',
   'reel.unmuteA11y': 'Unmute',
+  'reel.playVideo': 'Play video',
+  'reel.playVideoA11y': 'Load and play this reel’s video',
   'translate.title': 'Tap to translate',
   'translate.save': 'Save phrase',
   'translate.saved': 'Saved',
@@ -179,6 +187,9 @@ const EN: Record<UiStringKey, string> = {
   'tutor.body':
     'Live video tutors and streaming STT/LLM routing are planned — see ARCHITECTURE.md.',
   'tutor.close': 'Close',
+  'tutor.openLab': 'Open tutor lab (browser)',
+  'tutor.openLabUnavailable':
+    'Set EXPO_PUBLIC_YOUTUBE_PROXY_URL (or EXPO_PUBLIC_TUTOR_LAB_URL) to your running reference-nextjs-api host, then restart Expo.',
   'level.beginner': 'Beginner',
   'level.intermediate': 'Intermediate',
   'level.advanced': 'Advanced',
@@ -211,6 +222,7 @@ const ES: Record<UiStringKey, string> = {
   'tab.reels': 'Reels',
   'tab.profile': 'Perfil',
   'tab.progress': 'Progreso',
+  'tab.tutor': 'Tutor',
   'profile.title': 'Tú',
   'profile.subtitle':
     'Aquí aparecerán racha de estudio, reels guardados y metas de idioma.',
@@ -237,6 +249,8 @@ const ES: Record<UiStringKey, string> = {
   'reel.practiceA11y': 'Abrir ejercicio rápido para este reel',
   'reel.muteA11y': 'Silenciar',
   'reel.unmuteA11y': 'Activar sonido',
+  'reel.playVideo': 'Ver video',
+  'reel.playVideoA11y': 'Cargar y reproducir el video de este reel',
   'translate.title': 'Toca para traducir',
   'translate.save': 'Guardar frase',
   'translate.saved': 'Guardado',
@@ -286,6 +300,9 @@ const ES: Record<UiStringKey, string> = {
   'tutor.body':
     'Tutores en vídeo y enrutado STT/LLM en streaming están planeados — ver ARCHITECTURE.md.',
   'tutor.close': 'Cerrar',
+  'tutor.openLab': 'Abrir laboratorio del tutor (navegador)',
+  'tutor.openLabUnavailable':
+    'Define EXPO_PUBLIC_YOUTUBE_PROXY_URL (o EXPO_PUBLIC_TUTOR_LAB_URL) con el host de reference-nextjs-api y reinicia Expo.',
   'level.beginner': 'Principiante',
   'level.intermediate': 'Intermedio',
   'level.advanced': 'Avanzado',
@@ -318,6 +335,7 @@ const FR: Record<UiStringKey, string> = {
   'tab.reels': 'Reels',
   'tab.profile': 'Profil',
   'tab.progress': 'Progrès',
+  'tab.tutor': 'Tuteur',
   'profile.title': 'Vous',
   'profile.subtitle':
     'Série d’étude, reels enregistrés et objectifs linguistiques seront ici.',
@@ -344,6 +362,8 @@ const FR: Record<UiStringKey, string> = {
   'reel.practiceA11y': 'Ouvrir un mini-exercice pour ce reel',
   'reel.muteA11y': 'Couper le son',
   'reel.unmuteA11y': 'Activer le son',
+  'reel.playVideo': 'Lire la vidéo',
+  'reel.playVideoA11y': 'Charger et lire la vidéo de ce reel',
   'translate.title': 'Appuyer pour traduire',
   'translate.save': 'Enregistrer la phrase',
   'translate.saved': 'Enregistré',
@@ -393,6 +413,9 @@ const FR: Record<UiStringKey, string> = {
   'tutor.body':
     'Tuteurs vidéo et routage STT/LLM en flux sont prévus — voir ARCHITECTURE.md.',
   'tutor.close': 'Fermer',
+  'tutor.openLab': 'Ouvrir le labo tuteur (navigateur)',
+  'tutor.openLabUnavailable':
+    'Définis EXPO_PUBLIC_YOUTUBE_PROXY_URL (ou EXPO_PUBLIC_TUTOR_LAB_URL) vers reference-nextjs-api, puis redémarre Expo.',
   'level.beginner': 'Débutant',
   'level.intermediate': 'Intermédiaire',
   'level.advanced': 'Avancé',
@@ -425,6 +448,7 @@ const DE: Record<UiStringKey, string> = {
   'tab.reels': 'Reels',
   'tab.profile': 'Profil',
   'tab.progress': 'Fortschritt',
+  'tab.tutor': 'Tutor',
   'profile.title': 'Du',
   'profile.subtitle':
     'Lernserie, gespeicherte Reels und Sprachziele erscheinen hier.',
@@ -451,6 +475,8 @@ const DE: Record<UiStringKey, string> = {
   'reel.practiceA11y': 'Kurzübung für dieses Reel öffnen',
   'reel.muteA11y': 'Stummschalten',
   'reel.unmuteA11y': 'Ton an',
+  'reel.playVideo': 'Video abspielen',
+  'reel.playVideoA11y': 'Video dieses Reels laden und abspielen',
   'translate.title': 'Tippen zum Übersetzen',
   'translate.save': 'Phrase speichern',
   'translate.saved': 'Gespeichert',
@@ -500,6 +526,9 @@ const DE: Record<UiStringKey, string> = {
   'tutor.body':
     'Live-Video-Tutoren und Streaming-STT/LLM-Routing sind geplant — siehe ARCHITECTURE.md.',
   'tutor.close': 'Schließen',
+  'tutor.openLab': 'Tutor-Lab im Browser öffnen',
+  'tutor.openLabUnavailable':
+    'Setze EXPO_PUBLIC_YOUTUBE_PROXY_URL (oder EXPO_PUBLIC_TUTOR_LAB_URL) auf den reference-nextjs-api-Host und starte Expo neu.',
   'level.beginner': 'Anfänger',
   'level.intermediate': 'Mittelstufe',
   'level.advanced': 'Fortgeschritten',
@@ -532,6 +561,7 @@ const JA: Record<UiStringKey, string> = {
   'tab.reels': 'リール',
   'tab.profile': 'プロフィール',
   'tab.progress': '進捗',
+  'tab.tutor': 'チューター',
   'profile.title': 'あなた',
   'profile.subtitle':
     '学習ストリーク、保存したリール、言語目標はここに表示されます。',
@@ -558,6 +588,8 @@ const JA: Record<UiStringKey, string> = {
   'reel.practiceA11y': 'このリールのミニドリルを開く',
   'reel.muteA11y': 'ミュート',
   'reel.unmuteA11y': 'ミュート解除',
+  'reel.playVideo': '動画を再生',
+  'reel.playVideoA11y': 'このリールの動画を読み込んで再生',
   'translate.title': 'タップして翻訳',
   'translate.save': 'フレーズを保存',
   'translate.saved': '保存済み',
@@ -607,6 +639,9 @@ const JA: Record<UiStringKey, string> = {
   'tutor.body':
     'ライブ動画チューターや STT/LLM のストリーミングは計画中です（ARCHITECTURE.md）。',
   'tutor.close': '閉じる',
+  'tutor.openLab': 'チューターラボを開く（ブラウザ）',
+  'tutor.openLabUnavailable':
+    'reference-nextjs-api のホストを EXPO_PUBLIC_YOUTUBE_PROXY_URL（または EXPO_PUBLIC_TUTOR_LAB_URL）に設定し、Expo を再起動してください。',
   'level.beginner': '初級',
   'level.intermediate': '中級',
   'level.advanced': '上級',

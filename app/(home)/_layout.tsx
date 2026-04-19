@@ -1,17 +1,22 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { BlurView } from 'expo-blur';
 import { Tabs } from 'expo-router';
 import { Platform, StyleSheet, View } from 'react-native';
 
+import { useLocale } from '@/contexts/LocaleContext';
+
 export default function HomeTabLayout() {
+  const { t } = useLocale();
+
   return (
     <Tabs
       initialRouteName="home"
       screenOptions={{
         headerShown: false,
         tabBarHideOnKeyboard: true,
-        tabBarActiveTintColor: '#2196F3',
-        tabBarInactiveTintColor: 'rgba(0,0,0,0.42)',
+        tabBarActiveTintColor: '#fafafa',
+        tabBarInactiveTintColor: 'rgba(255,255,255,0.38)',
         tabBarLabelStyle: { fontSize: 11, fontWeight: '600' },
         tabBarStyle: {
           position: 'absolute',
@@ -23,20 +28,20 @@ export default function HomeTabLayout() {
           borderRadius: 28,
           borderTopWidth: 0,
           backgroundColor: 'transparent',
-          elevation: 12,
+          elevation: 16,
           shadowColor: '#000',
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.12,
-          shadowRadius: 12,
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: 0.35,
+          shadowRadius: 16,
         },
         tabBarBackground: () =>
           Platform.OS === 'ios' ? (
-            <BlurView intensity={72} tint="light" style={StyleSheet.absoluteFill} />
+            <BlurView intensity={48} tint="dark" style={StyleSheet.absoluteFill} />
           ) : (
             <View
               style={[
                 StyleSheet.absoluteFill,
-                { backgroundColor: 'rgba(255,255,255,0.94)', borderRadius: 28 },
+                { backgroundColor: 'rgba(23,23,23,0.94)', borderRadius: 28 },
               ]}
             />
           ),
@@ -69,6 +74,15 @@ export default function HomeTabLayout() {
         }}
       />
       <Tabs.Screen
+        name="tutor"
+        options={{
+          title: t('tab.tutor'),
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="school-outline" color={color} size={size ?? 22} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="dictionary"
         options={{
           title: 'Dictionary',
@@ -80,10 +94,7 @@ export default function HomeTabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'Profile',
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="user" color={color} size={size ?? 22} />
-          ),
+          href: null,
         }}
       />
     </Tabs>
