@@ -15,13 +15,16 @@ export const TabBarButton = React.forwardRef<any, BottomTabBarButtonProps>(
       <Pressable
         ref={ref}
         {...props}
-        style={(state) => [
-          props.style,
-          (state.hovered || state.pressed) && {
-            transform: [{ scale: state.pressed ? 1.04 : 1.07 }],
-          },
-          webEase,
-        ]}
+        style={(state) => {
+          const s = state as { pressed?: boolean; hovered?: boolean };
+          return [
+            props.style,
+            (s.hovered || s.pressed) && {
+              transform: [{ scale: s.pressed ? 1.04 : 1.07 }],
+            },
+            webEase,
+          ];
+        }}
       />
     );
   },

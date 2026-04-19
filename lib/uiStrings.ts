@@ -74,7 +74,18 @@ export type UiStringKey =
   | 'share.lead'
   | 'notFound.title'
   | 'notFound.message'
-  | 'notFound.link';
+  | 'notFound.link'
+  | 'reel.streakStart'
+  | 'reel.quizSoon'
+  | 'drill.next'
+  | 'drill.notQuite'
+  | 'drill.correctAnswerIs'
+  | 'drill.pointsPlus'
+  | 'drill.tryOnceMore'
+  | 'milestone.streak7'
+  | 'milestone.points50'
+  | 'milestone.keepGoing'
+  | 'milestone.tapDismiss';
 
 const EN: Record<UiStringKey, string> = {
   'tab.reels': 'Reels',
@@ -154,6 +165,17 @@ const EN: Record<UiStringKey, string> = {
   'notFound.title': 'Oops!',
   'notFound.message': 'This screen does not exist.',
   'notFound.link': 'Go to home',
+  'reel.streakStart': 'Start your streak!',
+  'reel.quizSoon': 'Quiz soon…',
+  'drill.next': 'Next',
+  'drill.notQuite': 'Not quite.',
+  'drill.correctAnswerIs': 'The correct answer is:',
+  'drill.pointsPlus': '+10 pts',
+  'drill.tryOnceMore': 'Try once more!',
+  'milestone.streak7': '7-day streak!',
+  'milestone.points50': '50 points!',
+  'milestone.keepGoing': 'Keep it going!',
+  'milestone.tapDismiss': 'Tap to continue',
 };
 
 const ES: Record<UiStringKey, string> = {
@@ -234,6 +256,17 @@ const ES: Record<UiStringKey, string> = {
   'notFound.title': '¡Ups!',
   'notFound.message': 'Esta pantalla no existe.',
   'notFound.link': 'Ir al inicio',
+  'reel.streakStart': '¡Empieza tu racha!',
+  'reel.quizSoon': 'Quiz pronto…',
+  'drill.next': 'Siguiente',
+  'drill.notQuite': 'Casi.',
+  'drill.correctAnswerIs': 'La respuesta correcta es:',
+  'drill.pointsPlus': '+10 pts',
+  'drill.tryOnceMore': '¡Inténtalo una vez más!',
+  'milestone.streak7': '¡Racha de 7 días!',
+  'milestone.points50': '¡50 puntos!',
+  'milestone.keepGoing': '¡Sigue así!',
+  'milestone.tapDismiss': 'Toca para continuar',
 };
 
 const FR: Record<UiStringKey, string> = {
@@ -314,6 +347,17 @@ const FR: Record<UiStringKey, string> = {
   'notFound.title': 'Oups !',
   'notFound.message': 'Cet écran n’existe pas.',
   'notFound.link': "Retour à l’accueil",
+  'reel.streakStart': 'Commence ta série !',
+  'reel.quizSoon': 'Quiz bientôt…',
+  'drill.next': 'Suivant',
+  'drill.notQuite': 'Pas tout à fait.',
+  'drill.correctAnswerIs': 'La bonne réponse est :',
+  'drill.pointsPlus': '+10 pts',
+  'drill.tryOnceMore': 'Réessaie une fois !',
+  'milestone.streak7': 'Série de 7 jours !',
+  'milestone.points50': '50 points !',
+  'milestone.keepGoing': 'Continue comme ça !',
+  'milestone.tapDismiss': 'Touchez pour continuer',
 };
 
 const DE: Record<UiStringKey, string> = {
@@ -394,6 +438,17 @@ const DE: Record<UiStringKey, string> = {
   'notFound.title': 'Hoppla!',
   'notFound.message': 'Dieser Bildschirm existiert nicht.',
   'notFound.link': 'Zur Startseite',
+  'reel.streakStart': 'Starte deine Serie!',
+  'reel.quizSoon': 'Quiz bald…',
+  'drill.next': 'Weiter',
+  'drill.notQuite': 'Nicht ganz.',
+  'drill.correctAnswerIs': 'Die richtige Antwort ist:',
+  'drill.pointsPlus': '+10 Pkt.',
+  'drill.tryOnceMore': 'Noch ein Versuch!',
+  'milestone.streak7': '7-Tage-Serie!',
+  'milestone.points50': '50 Punkte!',
+  'milestone.keepGoing': 'Weiter so!',
+  'milestone.tapDismiss': 'Tippen zum Fortfahren',
 };
 
 const JA: Record<UiStringKey, string> = {
@@ -474,6 +529,17 @@ const JA: Record<UiStringKey, string> = {
   'notFound.title': 'おっと',
   'notFound.message': 'この画面は存在しません。',
   'notFound.link': 'ホームへ',
+  'reel.streakStart': 'ストリークを始めよう！',
+  'reel.quizSoon': 'まもなくクイズ…',
+  'drill.next': '次へ',
+  'drill.notQuite': '惜しい！',
+  'drill.correctAnswerIs': '正解は:',
+  'drill.pointsPlus': '+10 pt',
+  'drill.tryOnceMore': 'もう一度！',
+  'milestone.streak7': '7日連続！',
+  'milestone.points50': '50ポイント！',
+  'milestone.keepGoing': 'その調子！',
+  'milestone.tapDismiss': 'タップで続ける',
 };
 
 const BY_LOCALE: Record<AppLocale, Record<UiStringKey, string>> = {

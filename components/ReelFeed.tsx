@@ -17,6 +17,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { accentHexForReel } from '@/constants/designTokens';
 import { MOCK_REELS } from '@/constants/mockReels';
 import { TOP_REEL_OVERLAY_GAP } from '@/constants/tabBar';
 import { useLocale } from '@/contexts/LocaleContext';
@@ -31,10 +32,18 @@ import { rankReelsForFeed } from '@/lib/reelsRanking';
 import { loadReels } from '@/lib/reelsSource';
 import { countSavedPhrases } from '@/lib/savedPhrasesStorage';
 import { getUiString } from '@/lib/uiStrings';
-import { recordDrillResult, syncSavedPhraseCount, touchStreak } from '@/lib/progressMetrics';
+import {
+  loadProgressSnapshot,
+  markMilestoneSeen,
+  recordDrillResult,
+  syncSavedPhraseCount,
+  touchStreak,
+  type ProgressSnapshot,
+} from '@/lib/progressMetrics';
 import { shareReel } from '@/lib/shareReel';
 import type { ReelItemData } from '@/types/reel';
 
+import { MilestoneOverlay } from './MilestoneOverlay';
 import { PostReelDrillModal } from './PostReelDrillModal';
 import { ReelItem } from './ReelItem';
 
@@ -72,6 +81,10 @@ export function ReelFeed() {
 
   const [drillOpen, setDrillOpen] = useState(false);
   const [drillItem, setDrillItem] = useState<ReelItemData | null>(null);
+  const [progress, setProgress] = useState<ProgressSnapshot | null>(null);
+  const [milestoneKind, setMilestoneKind] = useState<
+    null | 'streak7' | 'points50'
+  >(null);
 
   const listRef = useRef<FlatList<ReelItemData>>(null);
   const appendRoundRef = useRef(0);
@@ -110,6 +123,25 @@ export function ReelFeed() {
   useEffect(() => {
     void touchStreak();
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    void loadProgressSnapshot().then((p) => {
+      if (!cancelled) setProgress(p);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!progress || milestoneKind !== null) return;
+    if (progress.streakDays >= 7 && !progress.milestoneStreak7Shown) {
+      setMilestoneKind('streak7');
+    } else if (progress.points >= 50 && !progress.milestonePoints50Shown) {
+      setMilestoneKind('points50');
+    }
+  }, [progress, milestoneKind]);
 
   useEffect(() => {
     let cancelled = false;
@@ -179,8 +211,20 @@ export function ReelFeed() {
   }, []);
 
   const onDrillComplete = useCallback(async (correct: boolean) => {
-    await recordDrillResult(correct);
+    const next = await recordDrillResult(correct);
+    setProgress(next);
   }, []);
+
+  const dismissMilestone = useCallback(async () => {
+    if (milestoneKind === 'streak7') {
+      await markMilestoneSeen('streak7');
+    } else if (milestoneKind === 'points50') {
+      await markMilestoneSeen('points50');
+    }
+    const p = await loadProgressSnapshot();
+    setProgress(p);
+    setMilestoneKind(null);
+  }, [milestoneKind]);
 
   const fetchReels = useCallback(async (isRefresh: boolean) => {
     if (isRefresh) setRefreshing(true);
@@ -275,6 +319,14 @@ export function ReelFeed() {
   const reelWidth = viewport ? Math.max(1, viewport.w) : 1;
   const overlayTop = insets.top + TOP_REEL_OVERLAY_GAP;
 
+  const activeReel = useMemo(
+    () => reels.find((r) => r.id === activeId),
+    [reels, activeId],
+  );
+  const milestoneAccent = activeReel
+    ? accentHexForReel(activeReel.language, activeReel.accentColor)
+    : accentHexForReel('en');
+
   const appendMoreReels = useCallback(() => {
     if (orderedCatalogRef.current.length === 0) return;
     appendRoundRef.current += 1;
@@ -320,6 +372,8 @@ export function ReelFeed() {
         onPhraseLibraryChange={() => void onPhraseLibraryChange()}
         onPracticePress={() => openDrill(item)}
         onReelShowLess={() => void onReelShowLessForReel(item.id)}
+        streakDays={progress?.streakDays ?? 0}
+        showFlame={(progress?.drillsCorrect ?? 0) > 0}
       />
     ),
     [
@@ -337,6 +391,8 @@ export function ReelFeed() {
       onPhraseLibraryChange,
       openDrill,
       onReelShowLessForReel,
+      progress?.streakDays,
+      progress?.drillsCorrect,
     ],
   );
 
@@ -410,7 +466,7 @@ export function ReelFeed() {
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={onRefresh}
-                tintColor="#f472b6"
+                tintColor="#00D9FF"
               />
             }
           />
@@ -442,6 +498,25 @@ export function ReelFeed() {
         onClose={closeDrill}
         item={drillItem}
         onComplete={(ok) => void onDrillComplete(ok)}
+        accentHex={
+          drillItem
+            ? accentHexForReel(drillItem.language, drillItem.accentColor)
+            : undefined
+        }
+      />
+
+      <MilestoneOverlay
+        visible={milestoneKind !== null}
+        kind={milestoneKind}
+        title={
+          milestoneKind === 'points50'
+            ? t('milestone.points50')
+            : t('milestone.streak7')
+        }
+        subtitle={t('milestone.keepGoing')}
+        dismissLabel={t('milestone.tapDismiss')}
+        accentHex={milestoneAccent}
+        onDismiss={() => void dismissMilestone()}
       />
     </View>
   );

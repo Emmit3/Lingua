@@ -23,13 +23,21 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { FeedTheme, hexToRgba, webGradientFromAccent } from '@/constants/FeedTheme';
+import { accentHexForReel } from '@/constants/designTokens';
+import {
+  accentBottomWashColors,
+  FeedTheme,
+  hexToRgba,
+  webGradientFromAccent,
+} from '@/constants/FeedTheme';
+import { reelBottomBarOffset } from '@/constants/homeTabBar';
 import { useLocale } from '@/contexts/LocaleContext';
 import { languageFlagEmoji } from '@/lib/languageMeta';
 import { levelLabel } from '@/lib/uiStrings';
 import { tokenizeCaption } from '@/lib/tokenize';
 import type { ReelItemData } from '@/types/reel';
 
+import { ReelBottomBar, REEL_BOTTOM_BAR_HEIGHT } from './ReelBottomBar';
 import { TranslateSheet } from './TranslateSheet';
 
 type Props = {
@@ -52,6 +60,10 @@ type Props = {
   onPhraseLibraryChange: () => void;
   onPracticePress: () => void;
   onReelShowLess: () => void;
+  /** Daily streak (calendar) */
+  streakDays: number;
+  /** Show flame in streak pill after first lifetime correct drill */
+  showFlame: boolean;
 };
 
 /** Instagram Reels–style large center heart flash on double-tap */
@@ -117,9 +129,11 @@ function IgPressable({
       onPress={onPress}
       accessibilityLabel={accessibilityLabel}
       hitSlop={hitSlop}
-      style={({ pressed, hovered }) => [
+      style={(state) => [
         styles.igPressableBase,
-        (pressed || hovered) && styles.igPressablePop,
+        (state.pressed ||
+          ('hovered' in state && (state as { hovered?: boolean }).hovered)) &&
+          styles.igPressablePop,
         webEase,
         style,
       ]}>
@@ -161,6 +175,8 @@ function ReelItemInner({
   onPhraseLibraryChange,
   onPracticePress,
   onReelShowLess,
+  streakDays,
+  showFlame,
 }: Props) {
   const { t, locale } = useLocale();
   const insets = useSafeAreaInsets();
@@ -217,7 +233,8 @@ function ReelItemInner({
     heartScale.value = withSequence(withSpring(1.22), withSpring(1));
   }, [onLikePress, heartScale]);
 
-  const accent = item.accentColor ?? '#ffffff';
+  const accent = accentHexForReel(item.language, item.accentColor);
+  const barBottom = reelBottomBarOffset(insets.bottom);
   const handle = item.authorHandle ?? 'lingua';
   const commentTotal = item.commentCount ?? Math.max(3, Math.floor(item.likeCount * 0.06));
   const levelLine = levelLabel(locale, item.level);
@@ -269,10 +286,29 @@ function ReelItemInner({
             style={StyleSheet.absoluteFill}
             pointerEvents="none"
           />
+          <LinearGradient
+            colors={[...accentBottomWashColors(accent)]}
+            locations={[0, 0.55, 1]}
+            style={StyleSheet.absoluteFill}
+            pointerEvents="none"
+          />
         </>
       )}
 
       <IgHeartFlash trigger={heartFlash} />
+
+      <View
+        style={[styles.bottomBarWrap, { bottom: barBottom }]}
+        pointerEvents="box-none">
+        <ReelBottomBar
+          streakDays={streakDays}
+          showFlame={showFlame}
+          languageLabel={item.languageLabel}
+          accentHex={accent}
+          streakStartLabel={t('reel.streakStart')}
+          quizSoonLabel={t('reel.quizSoon')}
+        />
+      </View>
 
       {/* Top: mute — Reels often show controls top-right */}
       <IgPressable
@@ -360,7 +396,8 @@ function ReelItemInner({
         style={[
           styles.bottomBlock,
           {
-            paddingBottom: Math.max(insets.bottom, 14) + 8,
+            paddingBottom:
+              barBottom + REEL_BOTTOM_BAR_HEIGHT + 18,
             paddingRight: 88,
           },
         ]}>
@@ -373,7 +410,7 @@ function ReelItemInner({
           </IgPressable>
         </View>
         <Text style={styles.metaLine} numberOfLines={2}>
-          {languageFlagEmoji(item.language)} {item.languageLabel} · {levelLine} ·{' '}
+          {languageFlagEmoji(item.language)} · {levelLine} ·{' '}
           {item.topicLocal ?? item.topic}
         </Text>
         <Pressable
@@ -384,7 +421,11 @@ function ReelItemInner({
           ]}
           accessibilityRole="button"
           accessibilityLabel={t('reel.practiceA11y')}>
-          <View style={styles.practiceChip}>
+          <View
+            style={[
+              styles.practiceChip,
+              { backgroundColor: hexToRgba(accent, 0.38) },
+            ]}>
             <Text style={styles.practiceChipText}>{t('reel.practice')}</Text>
           </View>
         </Pressable>
@@ -449,6 +490,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
     overflow: 'hidden',
   } as ViewStyle,
+  bottomBarWrap: {
+    position: 'absolute',
+    left: 12,
+    right: 12,
+    zIndex: 5,
+  },
   muteTop: {
     position: 'absolute',
     zIndex: 6,
@@ -586,9 +633,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 999,
-    backgroundColor: 'rgba(99,102,241,0.35)',
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(255,255,255,0.35)',
+    borderColor: 'rgba(255,255,255,0.4)',
   },
   practiceChipText: {
     color: '#fff',
