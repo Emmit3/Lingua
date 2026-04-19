@@ -11,6 +11,13 @@ export type UiStringKey =
   | 'profile.title'
   | 'profile.subtitle'
   | 'profile.appLanguage'
+  | 'profile.appInterface'
+  | 'profile.learningLanguage'
+  | 'profile.languageMenuHint'
+  | 'profile.interfaceHint'
+  | 'profile.studyLanguageHint'
+  | 'profile.change'
+  | 'profile.done'
   | 'profile.linkSettings'
   | 'about.navTitle'
   | 'about.title'
@@ -74,7 +81,24 @@ export type UiStringKey =
   | 'share.lead'
   | 'notFound.title'
   | 'notFound.message'
-  | 'notFound.link';
+  | 'notFound.link'
+  | 'reel.streakStart'
+  | 'reel.quizSoon'
+  | 'drill.next'
+  | 'drill.notQuite'
+  | 'drill.correctAnswerIs'
+  | 'drill.pointsPlus'
+  | 'drill.tryOnceMore'
+  | 'milestone.streak7'
+  | 'milestone.points50'
+  | 'milestone.keepGoing'
+  | 'milestone.tapDismiss'
+  | 'dictionary.title'
+  | 'dictionary.subtitle'
+  | 'dictionary.sectionReels'
+  | 'dictionary.sectionSaved'
+  | 'dictionary.emptyAll'
+  | 'dictionary.metaReels';
 
 const EN: Record<UiStringKey, string> = {
   'tab.reels': 'Reels',
@@ -84,6 +108,14 @@ const EN: Record<UiStringKey, string> = {
   'profile.subtitle':
     'Learning streak, saved reels, and language goals will live here.',
   'profile.appLanguage': 'App language',
+  'profile.appInterface': 'Interface language',
+  'profile.learningLanguage': "I'm learning",
+  'profile.languageMenuHint':
+    'Shorts search uses your study language — pull to refresh on the feed after changing.',
+  'profile.interfaceHint': 'Choose how menus, tabs, and buttons are labeled.',
+  'profile.studyLanguageHint': 'Shorts and lesson metadata use this target language.',
+  'profile.change': 'Choose',
+  'profile.done': 'Done',
   'profile.linkSettings': 'Subscription & payments',
   'about.navTitle': 'About',
   'about.title': 'Lingua',
@@ -154,6 +186,25 @@ const EN: Record<UiStringKey, string> = {
   'notFound.title': 'Oops!',
   'notFound.message': 'This screen does not exist.',
   'notFound.link': 'Go to home',
+  'reel.streakStart': 'Start your streak!',
+  'reel.quizSoon': 'Quiz soon…',
+  'drill.next': 'Next',
+  'drill.notQuite': 'Not quite.',
+  'drill.correctAnswerIs': 'The correct answer is:',
+  'drill.pointsPlus': '+10 pts',
+  'drill.tryOnceMore': 'Try once more!',
+  'milestone.streak7': '7-day streak!',
+  'milestone.points50': '50 points!',
+  'milestone.keepGoing': 'Keep it going!',
+  'milestone.tapDismiss': 'Tap to continue',
+  'dictionary.title': 'Dictionary',
+  'dictionary.subtitle':
+    'Words from captions on reels you watch, plus phrases you save when translating.',
+  'dictionary.sectionReels': 'From reels',
+  'dictionary.sectionSaved': 'Saved phrases',
+  'dictionary.emptyAll':
+    'Watch reels on the Feed tab — words from captions collect here automatically. Tap a word on a reel to save a phrase.',
+  'dictionary.metaReels': 'Seen in {{count}} reels',
 };
 
 const ES: Record<UiStringKey, string> = {
@@ -164,6 +215,14 @@ const ES: Record<UiStringKey, string> = {
   'profile.subtitle':
     'Aquí aparecerán racha de estudio, reels guardados y metas de idioma.',
   'profile.appLanguage': 'Idioma de la app',
+  'profile.appInterface': 'Idioma de la interfaz',
+  'profile.learningLanguage': 'Estoy aprendiendo',
+  'profile.languageMenuHint':
+    'La búsqueda de Shorts usa tu idioma de estudio; desliza hacia abajo en el feed para actualizar.',
+  'profile.interfaceHint': 'Elige cómo se muestran menús y botones.',
+  'profile.studyLanguageHint': 'Los Shorts y textos de lección usan este idioma.',
+  'profile.change': 'Elegir',
+  'profile.done': 'Listo',
   'profile.linkSettings': 'Suscripción y pagos',
   'about.navTitle': 'Acerca de',
   'about.title': 'Lingua',
@@ -234,6 +293,25 @@ const ES: Record<UiStringKey, string> = {
   'notFound.title': '¡Ups!',
   'notFound.message': 'Esta pantalla no existe.',
   'notFound.link': 'Ir al inicio',
+  'reel.streakStart': '¡Empieza tu racha!',
+  'reel.quizSoon': 'Quiz pronto…',
+  'drill.next': 'Siguiente',
+  'drill.notQuite': 'Casi.',
+  'drill.correctAnswerIs': 'La respuesta correcta es:',
+  'drill.pointsPlus': '+10 pts',
+  'drill.tryOnceMore': '¡Inténtalo una vez más!',
+  'milestone.streak7': '¡Racha de 7 días!',
+  'milestone.points50': '¡50 puntos!',
+  'milestone.keepGoing': '¡Sigue así!',
+  'milestone.tapDismiss': 'Toca para continuar',
+  'dictionary.title': 'Diccionario',
+  'dictionary.subtitle':
+    'Palabras de los subtítulos de los reels que ves, más frases que guardas al traducir.',
+  'dictionary.sectionReels': 'De los reels',
+  'dictionary.sectionSaved': 'Frases guardadas',
+  'dictionary.emptyAll':
+    'Mira reels en la pestaña Feed: las palabras de los subtítulos se guardan solas. Toca una palabra en un reel para guardar una frase.',
+  'dictionary.metaReels': 'Visto en {{count}} reels',
 };
 
 const FR: Record<UiStringKey, string> = {
@@ -244,6 +322,14 @@ const FR: Record<UiStringKey, string> = {
   'profile.subtitle':
     'Série d’étude, reels enregistrés et objectifs linguistiques seront ici.',
   'profile.appLanguage': 'Langue de l’app',
+  'profile.appInterface': 'Langue de l’interface',
+  'profile.learningLanguage': "J'apprends",
+  'profile.languageMenuHint':
+    'La recherche Shorts suit ta langue d’étude — tire pour rafraîchir le fil après un changement.',
+  'profile.interfaceHint': 'Choisis la langue des menus et boutons.',
+  'profile.studyLanguageHint': 'Les Shorts et textes suivent cette langue cible.',
+  'profile.change': 'Choisir',
+  'profile.done': 'OK',
   'profile.linkSettings': 'Abonnement et paiements',
   'about.navTitle': 'À propos',
   'about.title': 'Lingua',
@@ -314,6 +400,25 @@ const FR: Record<UiStringKey, string> = {
   'notFound.title': 'Oups !',
   'notFound.message': 'Cet écran n’existe pas.',
   'notFound.link': "Retour à l’accueil",
+  'reel.streakStart': 'Commence ta série !',
+  'reel.quizSoon': 'Quiz bientôt…',
+  'drill.next': 'Suivant',
+  'drill.notQuite': 'Pas tout à fait.',
+  'drill.correctAnswerIs': 'La bonne réponse est :',
+  'drill.pointsPlus': '+10 pts',
+  'drill.tryOnceMore': 'Réessaie une fois !',
+  'milestone.streak7': 'Série de 7 jours !',
+  'milestone.points50': '50 points !',
+  'milestone.keepGoing': 'Continue comme ça !',
+  'milestone.tapDismiss': 'Touchez pour continuer',
+  'dictionary.title': 'Dictionnaire',
+  'dictionary.subtitle':
+    'Mots des sous-titres des reels que vous regardez, plus les phrases enregistrées lors de la traduction.',
+  'dictionary.sectionReels': 'Issus des reels',
+  'dictionary.sectionSaved': 'Phrases enregistrées',
+  'dictionary.emptyAll':
+    'Regardez des reels dans l’onglet Fil — les mots des sous-titres s’accumulent automatiquement. Touchez un mot sur un reel pour enregistrer une phrase.',
+  'dictionary.metaReels': 'Vu dans {{count}} reels',
 };
 
 const DE: Record<UiStringKey, string> = {
@@ -324,6 +429,14 @@ const DE: Record<UiStringKey, string> = {
   'profile.subtitle':
     'Lernserie, gespeicherte Reels und Sprachziele erscheinen hier.',
   'profile.appLanguage': 'App-Sprache',
+  'profile.appInterface': 'Oberflächensprache',
+  'profile.learningLanguage': 'Ich lerne',
+  'profile.languageMenuHint':
+    'Shorts-Suche nutzt deine Lernsprache — Feed nach Änderung nach unten ziehen zum Aktualisieren.',
+  'profile.interfaceHint': 'Sprache für Menüs und Schaltflächen wählen.',
+  'profile.studyLanguageHint': 'Shorts und Lektionen nutzen diese Zielsprache.',
+  'profile.change': 'Wählen',
+  'profile.done': 'Fertig',
   'profile.linkSettings': 'Abo & Zahlungen',
   'about.navTitle': 'Info',
   'about.title': 'Lingua',
@@ -394,6 +507,25 @@ const DE: Record<UiStringKey, string> = {
   'notFound.title': 'Hoppla!',
   'notFound.message': 'Dieser Bildschirm existiert nicht.',
   'notFound.link': 'Zur Startseite',
+  'reel.streakStart': 'Starte deine Serie!',
+  'reel.quizSoon': 'Quiz bald…',
+  'drill.next': 'Weiter',
+  'drill.notQuite': 'Nicht ganz.',
+  'drill.correctAnswerIs': 'Die richtige Antwort ist:',
+  'drill.pointsPlus': '+10 Pkt.',
+  'drill.tryOnceMore': 'Noch ein Versuch!',
+  'milestone.streak7': '7-Tage-Serie!',
+  'milestone.points50': '50 Punkte!',
+  'milestone.keepGoing': 'Weiter so!',
+  'milestone.tapDismiss': 'Tippen zum Fortfahren',
+  'dictionary.title': 'Wörterbuch',
+  'dictionary.subtitle':
+    'Wörter aus Untertiteln der Reels, die du siehst, plus gespeicherte Sätze beim Übersetzen.',
+  'dictionary.sectionReels': 'Aus Reels',
+  'dictionary.sectionSaved': 'Gespeicherte Sätze',
+  'dictionary.emptyAll':
+    'Schau Reels im Feed — Wörter aus den Untertiteln sammeln sich automatisch. Tippe auf ein Wort im Reel, um eine Phrase zu speichern.',
+  'dictionary.metaReels': 'In {{count}} Reels gesehen',
 };
 
 const JA: Record<UiStringKey, string> = {
@@ -404,6 +536,14 @@ const JA: Record<UiStringKey, string> = {
   'profile.subtitle':
     '学習ストリーク、保存したリール、言語目標はここに表示されます。',
   'profile.appLanguage': 'アプリの言語',
+  'profile.appInterface': '表示言語',
+  'profile.learningLanguage': '学習中の言語',
+  'profile.languageMenuHint':
+    'ショートの検索に学習言語を使います。変更後はフィードで下に引いて更新してください。',
+  'profile.interfaceHint': 'メニューやボタンの表示言語を選びます。',
+  'profile.studyLanguageHint': 'ショートと教材の言語に使います。',
+  'profile.change': '選ぶ',
+  'profile.done': '完了',
   'profile.linkSettings': 'サブスクと支払い',
   'about.navTitle': '情報',
   'about.title': 'Lingua',
@@ -474,7 +614,33 @@ const JA: Record<UiStringKey, string> = {
   'notFound.title': 'おっと',
   'notFound.message': 'この画面は存在しません。',
   'notFound.link': 'ホームへ',
+  'reel.streakStart': 'ストリークを始めよう！',
+  'reel.quizSoon': 'まもなくクイズ…',
+  'drill.next': '次へ',
+  'drill.notQuite': '惜しい！',
+  'drill.correctAnswerIs': '正解は:',
+  'drill.pointsPlus': '+10 pt',
+  'drill.tryOnceMore': 'もう一度！',
+  'milestone.streak7': '7日連続！',
+  'milestone.points50': '50ポイント！',
+  'milestone.keepGoing': 'その調子！',
+  'milestone.tapDismiss': 'タップで続ける',
+  'dictionary.title': '辞書',
+  'dictionary.subtitle':
+    '視聴したリールの字幕から拾った単語と、翻訳で保存したフレーズ。',
+  'dictionary.sectionReels': 'リールから',
+  'dictionary.sectionSaved': '保存したフレーズ',
+  'dictionary.emptyAll':
+    'フィードでリールを見ると、字幕の単語が自動でここにたまります。リール上の単語をタップしてフレーズを保存できます。',
+  'dictionary.metaReels': '{{count}} 本のリールで登場',
 };
+
+const PT: Record<UiStringKey, string> = { ...EN };
+const KO: Record<UiStringKey, string> = { ...EN };
+const ZH: Record<UiStringKey, string> = { ...EN };
+const IT: Record<UiStringKey, string> = { ...EN };
+const RU: Record<UiStringKey, string> = { ...EN };
+const HI: Record<UiStringKey, string> = { ...EN };
 
 const BY_LOCALE: Record<AppLocale, Record<UiStringKey, string>> = {
   en: EN,
@@ -482,6 +648,12 @@ const BY_LOCALE: Record<AppLocale, Record<UiStringKey, string>> = {
   fr: FR,
   de: DE,
   ja: JA,
+  pt: PT,
+  ko: KO,
+  zh: ZH,
+  it: IT,
+  ru: RU,
+  hi: HI,
 };
 
 export function getUiString(locale: AppLocale, key: UiStringKey): string {

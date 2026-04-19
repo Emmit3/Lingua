@@ -1,13 +1,16 @@
+import { useFocusEffect } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { addDays, isBefore, startOfDay, startOfWeek } from 'date-fns';
+import { useCallback, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CourseCard } from '@/components/home/CourseCard';
 import { StatRing } from '@/components/home/StatRing';
 import { WeekStrip } from '@/components/home/WeekStrip';
+import { loadLearningLanguage } from '@/lib/learningLanguageStorage';
 import { useOnboardingStore } from '@/store/useOnboardingStore';
 
 const TAB_BAR_SPACE = 88;
@@ -16,6 +19,15 @@ export default function HomeDashboardScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const studyMinutes = useOnboardingStore((s) => s.studyMinutes);
+  const [pathTitle, setPathTitle] = useState('Learning path');
+
+  useFocusEffect(
+    useCallback(() => {
+      void loadLearningLanguage().then((lang) => {
+        setPathTitle(lang ? `${lang.label} · pathway` : 'Learning path');
+      });
+    }, []),
+  );
 
   const today = new Date();
   const monday = startOfWeek(today, { weekStartsOn: 1 });
@@ -34,7 +46,7 @@ export default function HomeDashboardScreen() {
       style={{ flex: 1 }}>
       <StatusBar style="light" />
       <View
-        className="mx-auto w-full max-w-[390px] flex-1"
+        className="w-full flex-1"
         style={{
           paddingTop: insets.top + 8,
           paddingBottom: TAB_BAR_SPACE + insets.bottom,
@@ -70,7 +82,12 @@ export default function HomeDashboardScreen() {
         </View>
 
         <View className="mt-auto rounded-t-3xl bg-white px-5 pb-6 pt-5">
-          <CourseCard title="Parrot Flight School" />
+          <Pressable
+            accessibilityRole="button"
+            accessibilityHint="Opens the courses tab with your learning path"
+            onPress={() => router.push('/(home)/courses')}>
+            <CourseCard title={pathTitle} />
+          </Pressable>
         </View>
       </View>
     </LinearGradient>

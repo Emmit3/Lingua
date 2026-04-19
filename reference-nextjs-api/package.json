@@ -1,5 +1,5 @@
 {
-  "name": "lingua-instagram-proxy",
+  "name": "lingua-api-proxy",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3040",

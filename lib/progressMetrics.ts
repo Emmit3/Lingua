@@ -10,6 +10,11 @@ export type ProgressSnapshot = {
   lastActiveDate: string | null;
   /** 0–100 demo fluency index */
   fluencyIndex: number;
+  /** Total points from correct drills (+10 each) */
+  points: number;
+  /** Shown milestone toasts (persisted so we don’t repeat) */
+  milestoneStreak7Shown: boolean;
+  milestonePoints50Shown: boolean;
 };
 
 const defaultSnap: ProgressSnapshot = {
@@ -19,6 +24,9 @@ const defaultSnap: ProgressSnapshot = {
   streakDays: 0,
   lastActiveDate: null,
   fluencyIndex: 12,
+  points: 0,
+  milestoneStreak7Shown: false,
+  milestonePoints50Shown: false,
 };
 
 async function read(): Promise<ProgressSnapshot> {
@@ -40,13 +48,29 @@ export async function loadProgressSnapshot(): Promise<ProgressSnapshot> {
   return read();
 }
 
+const POINTS_PER_CORRECT = 10;
+
 export async function recordDrillResult(correct: boolean): Promise<ProgressSnapshot> {
   const s = await read();
   const next: ProgressSnapshot = {
     ...s,
     drillsCompleted: s.drillsCompleted + 1,
     drillsCorrect: s.drillsCorrect + (correct ? 1 : 0),
+    points: s.points + (correct ? POINTS_PER_CORRECT : 0),
     fluencyIndex: Math.min(100, s.fluencyIndex + (correct ? 2 : 0)),
+  };
+  await write(next);
+  return next;
+}
+
+export async function markMilestoneSeen(
+  kind: 'streak7' | 'points50',
+): Promise<ProgressSnapshot> {
+  const s = await read();
+  const next: ProgressSnapshot = {
+    ...s,
+    ...(kind === 'streak7' ? { milestoneStreak7Shown: true } : {}),
+    ...(kind === 'points50' ? { milestonePoints50Shown: true } : {}),
   };
   await write(next);
   return next;

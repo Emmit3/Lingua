@@ -2,16 +2,17 @@
 
 This document sketches how the **clickable prototype** in this repo connects to a fuller **TikTok-for-languages** stack. The app ships with **local-only** drills, saved phrases, and progress; production backends are out of scope for the first slice.
 
-**Running the app (Mac Simulator, Windows, physical iPhone):** see [DEVELOPMENT.md](./DEVELOPMENT.md) if present, otherwise `npm run dev` or `npm start` from this directory.
+**Running the app (Mac Simulator, Windows web/Android, physical iPhone):** see [DEVELOPMENT.md](./DEVELOPMENT.md).
 
 **API server (optional):** use a parent workspace that starts Expo + `Lingua/backend`, or `cd backend && npm install && npm run dev` for the Fastify process only when you have the backend checked in.
 
 ## Client app (Expo web + native)
 
-- **Feed:** vertical reels from `EXPO_PUBLIC_REELS_URL` or `constants/mockReels.ts`, with **client-side ranking** (`lib/reelsRanking.ts`) using `show_less` reel ids and a user level preference (`lib/feedPreferenceStorage.ts`).
+- **Profile languages:** **Interface locale** (`APP_LOCALES` + flags in `constants/appLocale.ts`, UI strings in `lib/uiStrings.ts`) and **study language** for Shorts (`constants/learningLanguages.ts`, `lib/learningLanguageStorage.ts`) — pickers in `app/(home)/profile.tsx` + `components/profile/LanguagePickerModal.tsx`. Changing study language bumps `useLearningLanguageVersionStore` so `ReelFeed` refetches.
+- **Feed:** vertical shorts from **YouTube** (when `EXPO_PUBLIC_YOUTUBE_PROXY_URL` or `EXPO_PUBLIC_BACKEND_URL` is set — see `reference-nextjs-api/`), else optional JSON `EXPO_PUBLIC_REELS_URL`, else `constants/mockReels.ts`. **Client-side ranking** (`lib/reelsRanking.ts`) uses `show_less` reel ids and user level (`lib/feedPreferenceStorage.ts`). Tag hints: `EXPO_PUBLIC_YOUTUBE_FILTER_TAGS`, `lib/youtubePreferencesStorage.ts`, `lib/filterReelsByPreferredTags.ts`.
 - **Tap-to-translate:** tokenized captions, mock ES→EN gloss (`lib/mockWordGloss.ts`), phrases in AsyncStorage (`lib/savedPhrasesStorage.ts`).
-- **Drills:** lightweight modal after swipe or via **Practice** (`components/PostReelDrillModal.tsx`); results feed `lib/progressMetrics.ts`.
-- **Progress tab:** demo **90-day** curve and local metrics (`app/(tabs)/progress.tsx`).
+- **Drills:** **Interactive quizzes** (`components/PostReelDrillModal.tsx`) after roughly **every 8 reel swipes** (`components/ReelFeed.tsx`), with per-language accents (`constants/designTokens.ts`); **milestone toasts** (`components/MilestoneOverlay.tsx`) for streak/points; results in `lib/progressMetrics.ts`. **Reel rail** uses `components/ReelBottomBar.tsx` + `constants/homeTabBar.ts`.
+- **Progress metrics:** local storage and aggregations in `lib/progressMetrics.ts`.
 - **Knot (Web SDK):** `knotapi-js` is loaded on **web** only (`app/settings-knot.tsx`). Native opens the Knot docs URL; production would use a hosted web flow or deep link.
 
 ## Knot session (dev / demo)
@@ -53,8 +54,12 @@ Paste the returned `session` / `id` into the app (or into `EXPO_PUBLIC_KNOT_SESS
 
 | Variable | Purpose |
 | -------- | ------- |
-| `EXPO_PUBLIC_REELS_URL` | JSON reel catalog |
+| `EXPO_PUBLIC_YOUTUBE_PROXY_URL` | Base URL for Next proxy (`/api/youtube/shorts`); server needs `YOUTUBE_API_KEY` |
+| `EXPO_PUBLIC_YOUTUBE_SEARCH_Q` | Default YouTube search query (e.g. language + “shorts”) |
+| `EXPO_PUBLIC_YOUTUBE_FILTER_TAGS` | Comma-separated tag hints for client-side filtering |
+| `EXPO_PUBLIC_REEL_LANGUAGE` / `EXPO_PUBLIC_REEL_LANGUAGE_LABEL` | Labels on catalog items from YouTube |
+| `EXPO_PUBLIC_REELS_URL` | Optional JSON reel catalog (no YouTube) |
 | `EXPO_PUBLIC_KNOT_CLIENT_ID` | Knot client id (web) |
 | `EXPO_PUBLIC_KNOT_SESSION_ID` | Dev-only default session id |
 | `EXPO_PUBLIC_TRANSLATE_URL` | Future server translation endpoint |
-| `EXPO_PUBLIC_BACKEND_URL` | Spectrum `/chat`, `/tutor/session`, `/tutor/session/:id/end` (see `lib/tutorApi.ts`) |
+| `EXPO_PUBLIC_BACKEND_URL` | YouTube proxy (if no `YOUTUBE_PROXY_URL`), plus Spectrum `/chat`, `/tutor/session`, `/tutor/session/:id/end` (`lib/tutorApi.ts`) |

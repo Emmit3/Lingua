@@ -9,6 +9,7 @@ export default function HomeTabLayout() {
       initialRouteName="home"
       screenOptions={{
         headerShown: false,
+        tabBarHideOnKeyboard: true,
         tabBarActiveTintColor: '#2196F3',
         tabBarInactiveTintColor: 'rgba(0,0,0,0.42)',
         tabBarLabelStyle: { fontSize: 11, fontWeight: '600' },

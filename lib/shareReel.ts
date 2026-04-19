@@ -10,10 +10,14 @@ export async function shareReel(
 ): Promise<void> {
   const tagLine =
     item.hashtags && item.hashtags.length > 0 ? `\n${item.hashtags.join(' ')}` : '';
+  const yt =
+    item.youtubeVideoId != null && item.youtubeVideoId.length > 0
+      ? `\nhttps://www.youtube.com/watch?v=${item.youtubeVideoId}`
+      : '';
   const lead = getUiString(locale, 'share.lead');
   const message =
     item.shareMessage ??
-    `${lead} ${item.title} (${item.languageLabel})\n${item.transcript}\n— ${item.translation}${tagLine}`;
+    `${lead} ${item.title} (${item.languageLabel})\n${item.transcript}\n— ${item.translation}${tagLine}${yt}`;
 
   if (Platform.OS === 'web') {
     if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {

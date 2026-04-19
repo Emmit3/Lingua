@@ -4,18 +4,28 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "expo start",
+    "dev:lan-flask": "python lan_dev_server.py",
+    "dev:with-lan-flask": "concurrently -n expo,flask -c cyan,magenta \"expo start\" \"python lan_dev_server.py\"",
     "start": "expo start",
     "android": "expo start --android",
+    "phone:android": "node scripts/launch-android-phone.mjs",
     "ios": "expo start --ios",
     "web": "expo start --web",
     "dev:tunnel": "expo start --tunnel",
     "preview:iphone-web": "node scripts/open-iphone-frame.cjs",
+    "ios:prebuild": "expo prebuild --platform ios",
+    "ios:xcode": "expo prebuild --platform ios && expo run:ios",
+    "prebuild": "expo prebuild",
+    "native:ios": "expo run:ios",
+    "native:android": "expo run:android",
     "build:android:apk": "eas build -p android --profile preview",
     "build:ios": "eas build -p ios --profile production",
     "build:web": "expo export --platform web",
-    "verify:ig-proxy": "node scripts/verify-ig-proxy.mjs"
+    "test:servers": "node scripts/test-servers.mjs"
   },
   "dependencies": {
+    "@expo-google-fonts/inter": "^0.4.2",
+    "@expo-google-fonts/space-mono": "^0.4.2",
     "@expo/vector-icons": "^15.0.3",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-community/slider": "5.0.1",
@@ -38,6 +48,7 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-native": "0.81.5",
+    "react-native-css-interop": "^0.2.3",
     "react-native-gesture-handler": "~2.28.0",
     "react-native-reanimated": "~4.1.1",
     "react-native-safe-area-context": "~5.6.0",
@@ -50,6 +61,7 @@
     "zustand": "^5.0.12"
   },
   "devDependencies": {
+    "concurrently": "^9.1.2",
     "@types/react": "~19.1.0",
     "react-test-renderer": "19.1.0",
     "typescript": "~5.9.2"

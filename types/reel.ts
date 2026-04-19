@@ -14,9 +14,13 @@ export type ReelItemData = {
   translation: string;
   level: 1 | 2 | 3;
   videoUri: string;
+  /** When set, the feed uses a YouTube embed (WebView) instead of `videoUri` playback. */
+  youtubeVideoId?: string;
+  /** When set with `youtubeVideoId`, WebView loads this base embed URL + player query params. */
+  youtubeEmbedUrl?: string;
   /** Baseline engagement count (does not include the current user’s like). */
   likeCount: number;
-  /** Optional hex for chips / like heart (Instagram-style accents). */
+  /** Optional hex for chips / like heart accents. */
   accentColor?: string;
   /** Optional topic pill tint. */
   topicColor?: string;

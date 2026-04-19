@@ -26,7 +26,7 @@ export default function NotificationsScreen() {
     (granted: boolean) => {
       setNotificationsGranted(granted);
       completeOnboarding();
-      router.replace('/home');
+      router.replace('/(home)/home');
     },
     [completeOnboarding, router, setNotificationsGranted],
   );

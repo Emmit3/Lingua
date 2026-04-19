@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <title>Lingua — iPhone web preview</title>
+    <style>
+      :root {
+        --frame-w: 393;
+        --frame-h: 852;
+        --radius: 52px;
+        --bezel: 12px;
+        --studio: #0f1117;
+        --studio2: #1a1d27;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+        background: radial-gradient(1200px 800px at 50% 0%, #252a3a 0%, var(--studio) 55%);
+        color: #e8eaef;
+      }
+      .wrap {
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 16px 32px;
+        gap: 16px;
+      }
+      h1 {
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        opacity: 0.92;
+      }
+      .hint {
+        margin: 0;
+        max-width: 520px;
+        text-align: center;
+        font-size: 0.85rem;
+        line-height: 1.45;
+        color: #9aa3b2;
+      }
+      .hint code {
+        font-size: 0.8rem;
+        padding: 2px 6px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.06);
+        color: #c5d0e0;
+      }
+      .stage {
+        position: relative;
+        width: calc(var(--frame-w) * 1px);
+        height: calc(var(--frame-h) * 1px);
+        max-width: min(calc(var(--frame-w) * 1px), 92vw);
+        max-height: min(calc(var(--frame-h) * 1px), 88vh);
+        aspect-ratio: var(--frame-w) / var(--frame-h);
+        border-radius: var(--radius);
+        padding: var(--bezel);
+        background: linear-gradient(145deg, #2c313d 0%, #12141a 40%, #0a0b0f 100%);
+        box-shadow:
+          0 0 0 1px rgba(255, 255, 255, 0.06),
+          0 24px 80px rgba(0, 0, 0, 0.55),
+          inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        flex-shrink: 0;
+      }
+      .island {
+        position: absolute;
+        top: calc(var(--bezel) + 10px);
+        left: 50%;
+        transform: translateX(-50%);
+        width: 120px;
+        height: 34px;
+        background: #000;
+        border-radius: 20px;
+        z-index: 3;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+      }
+      .screen {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border-radius: calc(var(--radius) - var(--bezel) + 2px);
+        overflow: hidden;
+        background: #000;
+      }
+      iframe {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border: 0;
+        background: #fff;
+      }
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        justify-content: center;
+        max-width: 640px;
+      }
+      .toolbar label {
+        font-size: 0.78rem;
+        color: #9aa3b2;
+      }
+      .toolbar input {
+        width: min(360px, 70vw);
+        padding: 8px 10px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(0, 0, 0, 0.35);
+        color: #e8eaef;
+        font-size: 0.85rem;
+      }
+      .toolbar button {
+        cursor: pointer;
+        border: 0;
+        border-radius: 10px;
+        padding: 8px 14px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #0f1117;
+        background: linear-gradient(180deg, #a5b4fc 0%, #818cf8 100%);
+      }
+      .toolbar button:hover {
+        filter: brightness(1.05);
+      }
+      @media (max-width: 420px) {
+        .stage {
+          transform: scale(0.92);
+          transform-origin: center center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Lingua — iPhone-sized web</h1>
+      <p class="hint">
+        Run <code>npm run web</code> in the project root, then load your app inside this frame. Uses the same
+        <strong>393×852</strong> logical layout as a modern iPhone portrait webview. For native Simulator + Xcode, use
+        <code>npm run ios</code> on macOS (see <code>DEVELOPMENT.md</code>).
+      </p>
+      <div class="toolbar">
+        <label for="base">App origin</label>
+        <input id="base" type="url" autocomplete="off" spellcheck="false" />
+        <button type="button" id="reload">Reload frame</button>
+      </div>
+      <div class="stage" aria-label="iPhone device frame">
+        <div class="island" aria-hidden="true"></div>
+        <div class="screen">
+          <iframe
+            id="app"
+            title="Lingua app"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+            referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var defaultOrigin = window.location.origin;
+        if (!defaultOrigin || defaultOrigin === 'null' || defaultOrigin.indexOf('http') !== 0) {
+          defaultOrigin = 'http://localhost:8081';
+        }
+        var initial = params.get('url') || params.get('origin') || defaultOrigin;
+        initial = initial.replace(/\/$/, '');
+        var input = document.getElementById('base');
+        var iframe = document.getElementById('app');
+        input.value = initial;
+        function apply() {
+          var base = input.value.trim().replace(/\/$/, '');
+          if (!base) base = 'http://localhost:8081';
+          iframe.src = base + '/';
+        }
+        document.getElementById('reload').addEventListener('click', apply);
+        input.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') apply();
+        });
+        apply();
+      })();
+    </script>
+  </body>
+</html>

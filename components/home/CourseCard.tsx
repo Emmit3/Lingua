@@ -3,9 +3,11 @@ import { Text, View } from 'react-native';
 
 type Props = {
   title: string;
+  /** Small label above the title (default: learning path hint). */
+  eyebrow?: string;
 };
 
-export function CourseCard({ title }: Props) {
+export function CourseCard({ title, eyebrow = 'Courses & checkpoints' }: Props) {
   return (
     <LinearGradient
       colors={['#E8E0FF', '#DDD6FE', '#C4B5FD']}
@@ -14,7 +16,7 @@ export function CourseCard({ title }: Props) {
       style={{ alignSelf: 'stretch' }}
       className="overflow-hidden rounded-2xl p-5">
       <Text className="text-xs font-semibold uppercase tracking-wider text-violet-900/70">
-        Current course
+        {eyebrow}
       </Text>
       <Text className="mt-2 text-xl font-bold text-violet-950">{title}</Text>
       <View className="mt-4 flex-row items-center">
